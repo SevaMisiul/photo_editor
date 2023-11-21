@@ -28,6 +28,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ${PROJECT_SOURCES}
 		custom_objects/qphoto_item.h custom_objects/qphoto_item.cpp
 		custom_objects/qphoto_item.h custom_objects/qphoto_item.cpp
+		custom_objects/qbase_layer.h custom_objects/qbase_layer.cpp
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET photo_editor APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
