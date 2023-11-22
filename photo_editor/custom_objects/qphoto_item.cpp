@@ -142,30 +142,76 @@ void QPhotoItem::paintCropping(QPainter *painter)
     painter->fillRect(rightTopRightRect.adjusted(1, 1, 0, 0), Qt::black);
 }
 
+//void QPhotoItem::resizeOnDrag(QPointF cursorPos)
+//{
+//    QPoint newPos(0, 0);
+//    QSize newSize(croppedSize);
+//    int right = drawingPixmap.width() - (int)croppedSize.width() - (int)left;
+//    int bottom = drawingPixmap.height() - (int)croppedSize.height() - (int)top;
+//    if (cursorPosBefore.x() < 10 + leftBefore) {
+//        newSize.setWidth(qMax(15.0, croppedSize.width() - (cursorPos.x() - left)));
+//        newPos.setX((int)croppedSize.width() - (int)newSize.width());
+//    } else if (cursorPosBefore.x() > leftBefore + sizeBefore.width() - 10) {
+//        newSize.setWidth(qMax(15.0, cursorPos.x() - left));
+//    }
+//    if (cursorPosBefore.y() < 10 + topBefore) {
+//        newSize.setHeight(qMax(15.0, croppedSize.height() - cursorPos.y()));
+//        newPos.setY((int)croppedSize.height() - (int)newSize.height());
+//    } else if (cursorPosBefore.y() > topBefore + sizeBefore.height() - 10) {
+//        newSize.setHeight(qMax(15.0, cursorPos.y() - top));
+//    }
+//    moveBy(newPos.x(), newPos.y());
+//    drawingPixmapSize.setWidth(drawingPixmapSize.width() * newSize.width() / croppedSize.width());
+//    drawingPixmapSize.setHeight(drawingPixmapSize.height()
+//                                * newSize.height() / croppedSize.height());
+//    drawingPixmap = QPixmap::fromImage(originalImage)
+//                        .scaled(drawingPixmapSize.width(), drawingPixmapSize.height());
+//    int deltaLeft = drawingPixmap.width() - ((int)newSize.width() + right + (int)left),
+//        deltaTop = drawingPixmap.height() - ((int)newSize.height() + bottom + (int)top);
+//    qDebug() << deltaLeft << deltaTop << left << top;
+//    qDebug() << newSize << croppedSize;
+//    moveBy(-deltaLeft, -deltaTop);
+//    left += deltaLeft;
+//    top += deltaTop;
+//    croppedSize = newSize;
+//    scene()->update();
+//}
+
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
 {
     QPoint newPos(0, 0);
     QSizeF newSize(croppedSize);
+    qreal right = drawingPixmap.width() - (int) croppedSize.width() - (int) left;
+    qreal bottom = drawingPixmap.height() - (int) croppedSize.height() - (int) top;
+    qreal newLeft, newTop;
+    qreal coeffW, coeffH;
     if (cursorPosBefore.x() < 10 + leftBefore) {
         newSize.setWidth(qMax(15.0, croppedSize.width() - (cursorPos.x() - left)));
-        newPos.setX(croppedSize.width() - newSize.width());
+        newPos.setX((int) croppedSize.width() - (int) newSize.width());
     } else if (cursorPosBefore.x() > leftBefore + sizeBefore.width() - 10) {
         newSize.setWidth(qMax(15.0, cursorPos.x() - left));
     }
+    coeffW = newSize.width() / croppedSize.width();
+    drawingPixmapSize.setWidth(drawingPixmapSize.width() * coeffW);
+    newLeft = left * coeffW;
+    newPos.setX(newPos.x() + (int) left - (int) newLeft);
+
     if (cursorPosBefore.y() < 10 + topBefore) {
-        newSize.setHeight(qMax(15.0, croppedSize.height() - cursorPos.y()));
-        newPos.setY(croppedSize.height() - newSize.height());
+        newSize.setHeight(qMax(15.0, croppedSize.height() - (cursorPos.y() - top)));
+        newPos.setY((int) croppedSize.height() - (int) newSize.height());
     } else if (cursorPosBefore.y() > topBefore + sizeBefore.height() - 10) {
         newSize.setHeight(qMax(15.0, cursorPos.y() - top));
     }
+    coeffH = newSize.height() / croppedSize.height();
+    drawingPixmapSize.setHeight(drawingPixmapSize.height() * coeffH);
+    newTop = top * coeffH;
+    newPos.setY(newPos.y() + (int) top - (int) newTop);
+
     moveBy(newPos.x(), newPos.y());
-    drawingPixmapSize.setWidth(drawingPixmapSize.width() * (newSize.width() / croppedSize.width()));
-    drawingPixmapSize.setHeight(drawingPixmapSize.height()
-                                * (newSize.height() / croppedSize.height()));
-    drawingPixmap = QPixmap::fromImage(originalImage).scaled(drawingPixmapSize.width(), drawingPixmapSize.height());
-//    moveBy(left - left * ((qreal) newSize.width() / croppedSize.width()), top - top * ((qreal) newSize.height() / croppedSize.height()));
-    left = left * ((qreal) newSize.width() / croppedSize.width());
-    top = top * ((qreal) newSize.height() / croppedSize.height());
+    drawingPixmap = QPixmap::fromImage(originalImage)
+                        .scaled(drawingPixmapSize.width(), drawingPixmapSize.height());
+    left = newLeft;
+    top = newTop;
     croppedSize = newSize;
     scene()->update();
 }
@@ -174,25 +220,25 @@ void QPhotoItem::croppOnDrag(QPointF cursorPos)
 {
     int newLeft = left, newTop = top, newWidth = croppedSize.width(),
         newHeight = croppedSize.height();
-    int right = drawingPixmap.width() - croppedSize.width() - left;
-    int bottom = drawingPixmap.height() - croppedSize.height() - top;
+    qreal right = drawingPixmap.width() - croppedSize.width() - left;
+    qreal bottom = drawingPixmap.height() - croppedSize.height() - top;
     if (cursor().shape() == Qt::CursorShape::SizeAllCursor)
         return;
     if (cursorPosBefore.x() < leftBefore + 10) {
         newWidth = qMax(15.0,
-                        qMin((qreal) drawingPixmap.width() - right,
+                        qMin(drawingPixmap.width() - right,
                              croppedSize.width() + (left - cursorPos.x())));
         newLeft -= newWidth - croppedSize.width();
     } else if (cursorPosBefore.x() > left + sizeBefore.width() - 10) {
-        newWidth = qMax(15.0, qMin(drawingPixmap.width() - left, (cursorPos.x() - left)));
+        newWidth = qMax(15.0, qMin(drawingPixmap.width() - left, ((int) cursorPos.x() - left)));
     }
     if (cursorPosBefore.y() < topBefore + 10) {
         newHeight = qMax(15.0,
-                         qMin((qreal) drawingPixmap.height() - bottom,
-                              croppedSize.height() + (top - cursorPos.y())));
+                         qMin(drawingPixmap.height() - bottom,
+                              croppedSize.height() + (top - (int) cursorPos.y())));
         newTop -= newHeight - croppedSize.height();
     } else if (cursorPosBefore.y() > top + sizeBefore.height() - 10) {
-        newHeight = qMax(15.0, qMin(drawingPixmap.height() - top, cursorPos.y() - top));
+        newHeight = qMax(15.0, qMin(drawingPixmap.height() - top, (int) cursorPos.y() - top));
     }
     croppedSize.setWidth(newWidth);
     left = newLeft;
@@ -203,7 +249,7 @@ void QPhotoItem::croppOnDrag(QPointF cursorPos)
 
 QRectF QPhotoItem::boundingRect() const
 {
-    return QRectF(left, top, croppedSize.width(), croppedSize.height());
+    return QRectF((int) left, (int) top, (int) croppedSize.width(), (int) croppedSize.height());
 }
 
 void QPhotoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
