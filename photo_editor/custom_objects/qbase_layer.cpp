@@ -2,12 +2,19 @@
 
 #include <QPainter>
 
+QBaseLayer::QBaseLayer(QSize size, QColor col)
+    : layerSize(size)
+    , bgColor(col)
+{}
+
 QBaseLayer::QBaseLayer(QSize size)
     : layerSize(size)
+    , bgColor(255, 255, 255)
 {}
 
 QBaseLayer::QBaseLayer(int w, int h)
     : layerSize(w, h)
+    , bgColor(255, 255, 255)
 {}
 
 void QBaseLayer::setSize(QSize size)
@@ -22,6 +29,11 @@ void QBaseLayer::setSize(int w, int h)
     update();
 }
 
+void QBaseLayer::setColor(QColor col)
+{
+    bgColor = col;
+}
+
 QRectF QBaseLayer::boundingRect() const
 {
     return QRectF(QPoint(0, 0), layerSize);
@@ -29,5 +41,5 @@ QRectF QBaseLayer::boundingRect() const
 
 void QBaseLayer::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->fillRect(boundingRect(), Qt::white);
+    painter->fillRect(boundingRect(), bgColor);
 }

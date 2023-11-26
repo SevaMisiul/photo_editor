@@ -1,10 +1,10 @@
 #ifndef PHOTOEDITORWINDOW_H
 #define PHOTOEDITORWINDOW_H
 
-#include "custom_objects/qbase_layer.h"
-#include "custom_objects/qphoto_item.h"
 #include <QGraphicsScene>
 #include <QMainWindow>
+#include "custom_objects/qbase_layer.h"
+#include "custom_objects/qphoto_item.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,7 +17,7 @@ class PhotoEditorWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    PhotoEditorWindow(QWidget *parent = nullptr);
+    PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name, QWidget *parent = nullptr);
     ~PhotoEditorWindow();
 
 private slots:
@@ -28,7 +28,8 @@ private slots:
 private:
     Ui::PhotoEditorWindow *ui;
     QGraphicsScene *mainScene;
-    QPhotoItem* item;
-    QBaseLayer* layer;
+    QPhotoItem *item;
+    QString projectName;
+    QBaseLayer *layer;
 };
 #endif // PHOTOEDITORWINDOW_H

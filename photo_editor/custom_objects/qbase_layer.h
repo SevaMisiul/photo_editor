@@ -6,18 +6,24 @@
 class QBaseLayer : public QGraphicsRectItem
 {
 public:
+    QBaseLayer(QSize size, QColor col);
     QBaseLayer(QSize size);
     QBaseLayer(int w, int h);
 
     void setSize(QSize size);
     void setSize(int w, int h);
 
+    void setColor(QColor col);
+
     // QGraphicsItem interface
 public:
     virtual QRectF boundingRect() const override;
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
+    virtual void paint(QPainter *painter,
+                       const QStyleOptionGraphicsItem *option,
+                       QWidget *widget) override;
 
 private:
+    QColor bgColor;
     QSize layerSize;
 };
 

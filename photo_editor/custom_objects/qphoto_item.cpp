@@ -217,14 +217,15 @@ void QPhotoItem::croppOnDrag(QPointF cursorPos)
     scene()->update();
 }
 
-//void QPhotoItem::rotate(qreal degree)
-//{
-//    angle += degree;
-////    drawingPixmap = drawingPixmap.transformed(transform, Qt::SmoothTransformation);
-////    croppedSize.setWidth(drawingPixmap.size().width());
-////    croppedSize.setHeight(drawingPixmap.size().height());
-
-//}
+void QPhotoItem::rotate(qreal degree)
+{
+    angle += degree;
+    QTransform trasnform;
+    trasnform.rotate(angle);
+    drawingPixmap = drawingPixmap.transformed(trasnform, Qt::SmoothTransformation);
+    croppedSize.setWidth(drawingPixmap.size().width());
+    croppedSize.setHeight(drawingPixmap.size().height());
+}
 
 QRectF QPhotoItem::boundingRect() const
 {
