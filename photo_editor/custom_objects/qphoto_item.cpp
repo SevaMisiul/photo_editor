@@ -4,11 +4,12 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QPointF>
 
-QPhotoItem::QPhotoItem(QImage img)
+QPhotoItem::QPhotoItem(QImage &&img)
     : originalImage(img)
     , state(State::Disabled)
     , left(0)
     , top(0)
+    , angle(0)
 {
     drawingPixmap = QPixmap::fromImage(originalImage);
     croppedSize = drawingPixmap.size();
@@ -142,47 +143,10 @@ void QPhotoItem::paintCropping(QPainter *painter)
     painter->fillRect(rightTopRightRect.adjusted(1, 1, 0, 0), Qt::black);
 }
 
-//void QPhotoItem::resizeOnDrag(QPointF cursorPos)
-//{
-//    QPoint newPos(0, 0);
-//    QSize newSize(croppedSize);
-//    int right = drawingPixmap.width() - (int)croppedSize.width() - (int)left;
-//    int bottom = drawingPixmap.height() - (int)croppedSize.height() - (int)top;
-//    if (cursorPosBefore.x() < 10 + leftBefore) {
-//        newSize.setWidth(qMax(15.0, croppedSize.width() - (cursorPos.x() - left)));
-//        newPos.setX((int)croppedSize.width() - (int)newSize.width());
-//    } else if (cursorPosBefore.x() > leftBefore + sizeBefore.width() - 10) {
-//        newSize.setWidth(qMax(15.0, cursorPos.x() - left));
-//    }
-//    if (cursorPosBefore.y() < 10 + topBefore) {
-//        newSize.setHeight(qMax(15.0, croppedSize.height() - cursorPos.y()));
-//        newPos.setY((int)croppedSize.height() - (int)newSize.height());
-//    } else if (cursorPosBefore.y() > topBefore + sizeBefore.height() - 10) {
-//        newSize.setHeight(qMax(15.0, cursorPos.y() - top));
-//    }
-//    moveBy(newPos.x(), newPos.y());
-//    drawingPixmapSize.setWidth(drawingPixmapSize.width() * newSize.width() / croppedSize.width());
-//    drawingPixmapSize.setHeight(drawingPixmapSize.height()
-//                                * newSize.height() / croppedSize.height());
-//    drawingPixmap = QPixmap::fromImage(originalImage)
-//                        .scaled(drawingPixmapSize.width(), drawingPixmapSize.height());
-//    int deltaLeft = drawingPixmap.width() - ((int)newSize.width() + right + (int)left),
-//        deltaTop = drawingPixmap.height() - ((int)newSize.height() + bottom + (int)top);
-//    qDebug() << deltaLeft << deltaTop << left << top;
-//    qDebug() << newSize << croppedSize;
-//    moveBy(-deltaLeft, -deltaTop);
-//    left += deltaLeft;
-//    top += deltaTop;
-//    croppedSize = newSize;
-//    scene()->update();
-//}
-
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
 {
     QPoint newPos(0, 0);
     QSizeF newSize(croppedSize);
-    qreal right = drawingPixmap.width() - (int) croppedSize.width() - (int) left;
-    qreal bottom = drawingPixmap.height() - (int) croppedSize.height() - (int) top;
     qreal newLeft, newTop;
     qreal coeffW, coeffH;
     if (cursorPosBefore.x() < 10 + leftBefore) {
@@ -208,8 +172,14 @@ void QPhotoItem::resizeOnDrag(QPointF cursorPos)
     newPos.setY(newPos.y() + (int) top - (int) newTop);
 
     moveBy(newPos.x(), newPos.y());
+
+    QTransform transform;
+    qreal transformX = drawingPixmapSize.width() / originalImage.width();
+    qreal transformY = drawingPixmapSize.height() / originalImage.height();
+    transform.scale(transformX, transformY);
     drawingPixmap = QPixmap::fromImage(originalImage)
-                        .scaled(drawingPixmapSize.width(), drawingPixmapSize.height());
+                        .transformed(transform, Qt::SmoothTransformation);
+
     left = newLeft;
     top = newTop;
     croppedSize = newSize;
@@ -247,6 +217,15 @@ void QPhotoItem::croppOnDrag(QPointF cursorPos)
     scene()->update();
 }
 
+//void QPhotoItem::rotate(qreal degree)
+//{
+//    angle += degree;
+////    drawingPixmap = drawingPixmap.transformed(transform, Qt::SmoothTransformation);
+////    croppedSize.setWidth(drawingPixmap.size().width());
+////    croppedSize.setHeight(drawingPixmap.size().height());
+
+//}
+
 QRectF QPhotoItem::boundingRect() const
 {
     return QRectF((int) left, (int) top, (int) croppedSize.width(), (int) croppedSize.height());
@@ -259,7 +238,6 @@ void QPhotoItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option
         paintCropping(painter);
     } else {
         painter->drawPixmap(QPoint(left, top), drawingPixmap, boundingRect());
-        //                painter->drawPixmap(left, top,croppedSize.width(), croppedSize.height(), drawingPixmap);
         if (state == State::Selected || state == State::Resizing) {
             paintSelected(painter);
         }

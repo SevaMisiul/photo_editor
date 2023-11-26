@@ -20,12 +20,11 @@ PhotoEditorWindow::~PhotoEditorWindow()
 void PhotoEditorWindow::on_pushButton_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Image", "", "Images (*.png *.jpg *.bmp)");
-    QImage img = QImage(fileName);
     ui->mainGraphView->setMouseTracking(true);
     layer = new QBaseLayer(1000, 1000);
     mainScene->addItem(layer);
     mainScene->setSceneRect(0, 0, 1000, 1000);
-    item = new QPhotoItem(img);
+    item = new QPhotoItem(QImage(fileName));
 
     item->setParentItem(layer);
     ui->mainGraphView->setBackgroundBrush(QBrush(Qt::gray));
@@ -33,7 +32,7 @@ void PhotoEditorWindow::on_pushButton_clicked()
 
 void PhotoEditorWindow::on_pushButton_2_clicked()
 {
-    layer->setSize(1300, 1300);
-    mainScene->setSceneRect(0, 0, 1300, 1300);
+//    item->rotate(30);
+    mainScene->update();
 }
 

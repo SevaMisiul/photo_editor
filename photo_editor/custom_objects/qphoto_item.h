@@ -8,11 +8,12 @@
 class QPhotoItem : public QGraphicsItem
 {
 public:
-    QPhotoItem(QImage img);
+    QPhotoItem(QImage &&img);
 
 private:
-    QPixmap drawingPixmap;
+    int angle;
     QImage originalImage;
+    QPixmap drawingPixmap;
     QSizeF croppedSize, sizeBefore, drawingPixmapSize;
     QPointF cursorPosBefore, itemPosBefore;
     qreal top, left, topBefore, leftBefore;
@@ -30,6 +31,7 @@ protected:
 
     // QGraphicsItem interface
 public:
+    void rotate(qreal degree);
     virtual QRectF boundingRect() const override;
     virtual void paint(QPainter *painter,
                        const QStyleOptionGraphicsItem *option,
