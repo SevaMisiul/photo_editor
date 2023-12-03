@@ -3,6 +3,7 @@
 #include "ui_start_dialog.h"
 
 #include <QColorDialog>
+#include <QFileDialog>
 #include <QIntValidator>
 
 StartDialog::StartDialog(QWidget *parent)
@@ -11,6 +12,7 @@ StartDialog::StartDialog(QWidget *parent)
     , r(255)
     , g(255)
     , b(255)
+    , filePath()
 {
     ui->setupUi(this);
     QIntValidator *sizeValidator = new QIntValidator(this);
@@ -19,8 +21,9 @@ StartDialog::StartDialog(QWidget *parent)
     ui->editHeight->setValidator(sizeValidator);
     ui->editWidth->setValidator(sizeValidator);
 
-    connect(ui->btnCreate, &QPushButton::clicked, this, &StartDialog::accept);
     connect(ui->btnClose, &QPushButton::clicked, this, &StartDialog::close);
+    connect(ui->btnCreate, &QPushButton::clicked, this, &StartDialog::accept);
+    connect(ui->btnOpen, &QPushButton::clicked, this, &StartDialog::accept);
 
     ui->btnCreate->setDisabled(true);
 
@@ -43,6 +46,16 @@ QString StartDialog::getProjectName()
 QColor StartDialog::getBackColor()
 {
     return QColor(r, g, b);
+}
+
+StartDialog::CreateMode StartDialog::getCreateMode()
+{
+    return createMode;
+}
+
+QString StartDialog::getFilePath()
+{
+    return filePath;
 }
 
 StartDialog::~StartDialog()
@@ -74,7 +87,11 @@ void StartDialog::on_editHeight_textChanged(const QString &arg1)
                                || ui->editProjectName->text().isEmpty());
 }
 
-void StartDialog::on_btnOpen_clicked() {}
+void StartDialog::on_btnOpen_clicked()
+{
+    filePath = QFileDialog::getOpenFileName(this, "Image", "", "Images (*.png *.jpg *.bmp)");
+    createMode = CreateMode::open;
+}
 
 void StartDialog::on_editR_textEdited(const QString &arg1)
 {
@@ -106,3 +123,9 @@ void StartDialog::on_btnColor_clicked()
     b = newColor.blue();
     setButtonColor();
 }
+
+void StartDialog::on_btnCreate_clicked()
+{
+    createMode = CreateMode::create;
+}
+

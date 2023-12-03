@@ -2,20 +2,32 @@
 
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
+#include <QKeyEvent>
 #include <QPointF>
 
-QPhotoItem::QPhotoItem(QImage &&img)
-    : originalImage(img)
+QPhotoItem::QPhotoItem(QString filePath, std::vector<QPhotoItem*>* items)
+    : originalImage(filePath)
     , state(State::Disabled)
     , left(0)
     , top(0)
-    , angle(0)
 {
     drawingPixmap = QPixmap::fromImage(originalImage);
     croppedSize = drawingPixmap.size();
     drawingPixmapSize = drawingPixmap.size();
     setFlag(ItemIsSelectable);
+    setFlag(ItemIsFocusable);
     setAcceptHoverEvents(true);
+
+    this->items = items;
+
+    name = "";
+    int i = filePath.length() - 1;
+    while (filePath[i] != '.' && i > 0) {
+        i--;
+    }
+    for (i--; i >= 0 && filePath[i] != '/'; i--) {
+        name = filePath[i] + name;
+    }
 }
 
 void QPhotoItem::paintSelected(QPainter *painter)
@@ -143,6 +155,41 @@ void QPhotoItem::paintCropping(QPainter *painter)
     painter->fillRect(rightTopRightRect.adjusted(1, 1, 0, 0), Qt::black);
 }
 
+QSize QPhotoItem::getSize()
+{
+    return drawingPixmap.size();
+}
+
+QString QPhotoItem::getName()
+{
+    return name;
+}
+
+void QPhotoItem::rotateClockwise()
+{
+    QTransform transform;
+    transform.rotate(90);
+
+    int bottom = drawingPixmapSize.height() - top - croppedSize.height();
+
+    moveBy(left + croppedSize.width() / 2 - bottom - croppedSize.height() / 2,
+           top + croppedSize.height() / 2 - left - croppedSize.width() / 2);
+
+    int tmp = left;
+    left = bottom;
+    top = tmp;
+
+    originalImage = originalImage.transformed(transform, Qt::SmoothTransformation);
+    drawingPixmap = drawingPixmap.transformed(transform, Qt::SmoothTransformation);
+    drawingPixmapSize = drawingPixmap.size();
+
+    tmp = croppedSize.height();
+    croppedSize.setHeight(croppedSize.width());
+    croppedSize.setWidth(tmp);
+
+    scene()->update();
+}
+
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
 {
     QPoint newPos(0, 0);
@@ -215,16 +262,6 @@ void QPhotoItem::croppOnDrag(QPointF cursorPos)
     croppedSize.setHeight(newHeight);
     top = newTop;
     scene()->update();
-}
-
-void QPhotoItem::rotate(qreal degree)
-{
-    angle += degree;
-    QTransform trasnform;
-    trasnform.rotate(angle);
-    drawingPixmap = drawingPixmap.transformed(trasnform, Qt::SmoothTransformation);
-    croppedSize.setWidth(drawingPixmap.size().width());
-    croppedSize.setHeight(drawingPixmap.size().height());
 }
 
 QRectF QPhotoItem::boundingRect() const
@@ -364,4 +401,9 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
     }
 
     return QGraphicsItem::itemChange(change, value);
+}
+
+void QPhotoItem::keyPressEvent(QKeyEvent *event)
+{
+
 }

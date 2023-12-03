@@ -12,6 +12,7 @@ public:
 
     void setSize(QSize size);
     void setSize(int w, int h);
+    [[nodiscard]] QSize getSize();
 
     void setColor(QColor col);
 

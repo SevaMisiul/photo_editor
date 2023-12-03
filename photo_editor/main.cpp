@@ -2,9 +2,10 @@
 #include "start_dialog.h"
 
 #include <QApplication>
+#include <QFile>
 #include <QLocale>
-#include <QTranslator>
 #include <QStyleFactory>
+#include <QTranslator>
 
 int main(int argc, char *argv[])
 {
@@ -18,14 +19,22 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
     a.setStyle(QStyleFactory::create("Fusion"));
     StartDialog startDialog;
+    startDialog.setWindowTitle("New document");
     if (startDialog.exec() == QDialog::Accepted) {
-        PhotoEditorWindow w(startDialog.getBackColor(),
-                            startDialog.getSize(),
-                            startDialog.getProjectName());
-        w.show();
-        return a.exec();
+        if (startDialog.getCreateMode() == StartDialog::CreateMode::create) {
+            PhotoEditorWindow w(startDialog.getBackColor(),
+                                startDialog.getSize(),
+                                startDialog.getProjectName());
+            w.show();
+            return a.exec();
+        } else {
+            PhotoEditorWindow w(startDialog.getFilePath());
+            w.show();
+            return a.exec();
+        }
     } else {
         return 0;
     }

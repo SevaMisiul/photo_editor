@@ -5,7 +5,8 @@
 QBaseLayer::QBaseLayer(QSize size, QColor col)
     : layerSize(size)
     , bgColor(col)
-{}
+{
+}
 
 QBaseLayer::QBaseLayer(QSize size)
     : layerSize(size)
@@ -27,6 +28,11 @@ void QBaseLayer::setSize(int w, int h)
 {
     layerSize = QSize(w, h);
     update();
+}
+
+QSize QBaseLayer::getSize()
+{
+    return layerSize;
 }
 
 void QBaseLayer::setColor(QColor col)
