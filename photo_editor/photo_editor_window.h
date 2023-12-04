@@ -5,7 +5,7 @@
 #include <QMainWindow>
 #include "custom_objects/qbase_layer.h"
 #include "custom_objects/qphoto_item.h"
-#include <vector>
+#include <unordered_map>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -27,14 +27,15 @@ private slots:
 
     void on_pushButton_2_clicked();
 
-    void on_mainGraphView_rubberBandChanged(const QRect &viewportRect, const QPointF &fromScenePoint, const QPointF &toScenePoint);
-
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;
     QGraphicsScene *mainScene;
     QString projectName;
-    std::vector<QPhotoItem *> items;
+    std::unordered_map<int, std::unique_ptr<QPhotoItem>> items;
     QBaseLayer *layer;
+
+private:
+    void addItem(std::unique_ptr<QPhotoItem>& item, QString filePath);
 };
 #endif // PHOTOEDITORWINDOW_H

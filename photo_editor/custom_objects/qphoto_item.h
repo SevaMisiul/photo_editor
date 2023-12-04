@@ -3,12 +3,16 @@
 
 #include <QGraphicsItem>
 #include <QGraphicsScene>
+#include <QListWidget>
 #include <QPainter>
 
 class QPhotoItem : public QGraphicsItem
 {
 public:
-    QPhotoItem(QString filePath, std::vector<QPhotoItem*>* items);
+    QPhotoItem(QString filePath,
+               QListWidget *listWidget,
+               std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items,
+               int id);
 
 private:
     QString name;
@@ -18,7 +22,9 @@ private:
     QPointF cursorPosBefore, itemPosBefore;
     qreal top, left, topBefore, leftBefore;
     qreal oldZValue;
-    std::vector<QPhotoItem*>* items;
+    QListWidget *listWidget;
+    std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items;
+    int id;
 
     void paintSelected(QPainter *painter);
     void paintCropping(QPainter *painter);

@@ -8,6 +8,8 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     : QMainWindow(parent)
     , ui(new Ui::PhotoEditorWindow)
     , projectName(name)
+    , items{}
+    , itemsCount{0}
 {
     ui->setupUi(this);
 
@@ -22,19 +24,17 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     mainScene->addItem(layer);
 
     setWindowTitle(projectName + " - Photo editor");
-
-    items = std::vector<QPhotoItem *>(10);
 }
 
 PhotoEditorWindow::PhotoEditorWindow(QString filePath, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PhotoEditorWindow)
+    , items{}
+    , itemsCount{0}
 {
     ui->setupUi(this);
 
-    items = std::vector<QPhotoItem *>(10);
-    QPhotoItem *item = new QPhotoItem(filePath, &items);
-    items.push_back(item);
+    std::unique_ptr<QPhotoItem> item{std::make_unique<QPhotoItem>(filePath, ui->listWidget, items, itemsCount)};
 
     mainScene = new QGraphicsScene(this);
     mainScene->setSceneRect(0, 0, item->getSize().width(), item->getSize().height());
@@ -45,11 +45,9 @@ PhotoEditorWindow::PhotoEditorWindow(QString filePath, QWidget *parent)
 
     layer = new QBaseLayer(item->getSize(), QColor(255, 255, 255));
     mainScene->addItem(layer);
-    item->setParentItem(layer);
-    item->setPos(layer->getSize().width() / 2 - item->getSize().width() / 2,
-                 layer->getSize().height() / 2 - item->getSize().height() / 2);
 
     setWindowTitle(item->getName() + " - Photo editor");
+    addItem(item, filePath);
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -57,23 +55,26 @@ PhotoEditorWindow::~PhotoEditorWindow()
     delete ui;
     delete mainScene;
     delete layer;
-    for (auto el : items) {
-        delete el;
-    }
 }
 
 void PhotoEditorWindow::on_pushButton_clicked()
 {
     QString filePath = QFileDialog::getOpenFileName(this, "Image", "", "Images (*.png *.jpg *.bmp)");
-    QPhotoItem *item = new QPhotoItem(filePath, &items);
-    items.push_back(item);
+    auto item = std::make_unique<QPhotoItem>(filePath, ui->listWidget, items, itemsCount);
+    addItem(item, filePath);
+}
+
+void PhotoEditorWindow::on_pushButton_2_clicked() {}
+
+void PhotoEditorWindow::addItem(std::unique_ptr<QPhotoItem>& item, QString filePath)
+{
     item->setParentItem(layer);
     item->setPos(layer->getSize().width() / 2 - item->getSize().width() / 2,
                  layer->getSize().height() / 2 - item->getSize().height() / 2);
 
-    QListWidgetItem *listItem = new QListWidgetItem(item->getName());
+    QListWidgetItem *listItem = new QListWidgetItem(item->getName(), ui->listWidget);
     listItem->setIcon(QIcon(filePath));
-    ui->listWidget->addItem(listItem);
+    listItem->setData(Qt::UserRole, QVariant(itemsCount));
+    items.insert({itemsCount++, std::move(item)});
 }
 
-void PhotoEditorWindow::on_pushButton_2_clicked() {}

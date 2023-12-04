@@ -5,11 +5,17 @@
 #include <QKeyEvent>
 #include <QPointF>
 
-QPhotoItem::QPhotoItem(QString filePath, std::vector<QPhotoItem*>* items)
+QPhotoItem::QPhotoItem(QString filePath,
+                       QListWidget *listWidget,
+                       std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items,
+                       int id)
     : originalImage(filePath)
     , state(State::Disabled)
     , left(0)
     , top(0)
+    , listWidget(listWidget)
+    , items(items)
+    , id(id)
 {
     drawingPixmap = QPixmap::fromImage(originalImage);
     croppedSize = drawingPixmap.size();
@@ -17,8 +23,6 @@ QPhotoItem::QPhotoItem(QString filePath, std::vector<QPhotoItem*>* items)
     setFlag(ItemIsSelectable);
     setFlag(ItemIsFocusable);
     setAcceptHoverEvents(true);
-
-    this->items = items;
 
     name = "";
     int i = filePath.length() - 1;
@@ -398,6 +402,10 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
             setFlag(ItemIsMovable, false);
             setZValue(oldZValue);
         }
+        for (int i = 0; i < listWidget->count(); i++) {
+            if (listWidget->item(i)->data(Qt::UserRole).toInt() == id)
+                listWidget->item(i)->setSelected(isSelected());
+        }
     }
 
     return QGraphicsItem::itemChange(change, value);
@@ -405,5 +413,8 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
 
 void QPhotoItem::keyPressEvent(QKeyEvent *event)
 {
-
+    if (event->key() == Qt::Key_Delete) {
+        items.erase(id);
+        delete listWidget->selectedItems()[0];
+    }
 }
