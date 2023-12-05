@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1096</width>
+    <width>1046</width>
     <height>1035</height>
    </rect>
   </property>
@@ -83,6 +83,12 @@
            <pointsize>11</pointsize>
           </font>
          </property>
+         <property name="focusPolicy">
+          <enum>Qt::StrongFocus</enum>
+         </property>
+         <property name="editTriggers">
+          <set>QAbstractItemView::DoubleClicked</set>
+         </property>
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
@@ -94,6 +100,9 @@
          </property>
          <property name="isWrapping" stdset="0">
           <bool>false</bool>
+         </property>
+         <property name="viewMode">
+          <enum>QListView::ListMode</enum>
          </property>
          <property name="selectionRectVisible">
           <bool>false</bool>
@@ -147,7 +156,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1096</width>
+     <width>1046</width>
      <height>21</height>
     </rect>
    </property>

@@ -27,6 +27,8 @@ private slots:
 
     void on_pushButton_2_clicked();
 
+    void on_listWidget_itemSelectionChanged();
+
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;
@@ -36,6 +38,10 @@ private:
     QBaseLayer *layer;
 
 private:
-    void addItem(std::unique_ptr<QPhotoItem>& item, QString filePath);
+    void addItem(std::unique_ptr<QPhotoItem> &item, QString filePath);
+
+    // QWidget interface
+protected:
+    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // PHOTOEDITORWINDOW_H

@@ -57,7 +57,6 @@ protected:
     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent *event) override;
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
-    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // QPHOTOITEM_H

@@ -410,11 +410,3 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
 
     return QGraphicsItem::itemChange(change, value);
 }
-
-void QPhotoItem::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Delete) {
-        items.erase(id);
-        delete listWidget->selectedItems()[0];
-    }
-}

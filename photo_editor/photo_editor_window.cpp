@@ -2,6 +2,7 @@
 #include "./ui_photo_editor_window.h"
 
 #include <QFileDialog>
+#include <QKeyEvent>
 #include <QString>
 
 PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name, QWidget *parent)
@@ -34,7 +35,8 @@ PhotoEditorWindow::PhotoEditorWindow(QString filePath, QWidget *parent)
 {
     ui->setupUi(this);
 
-    std::unique_ptr<QPhotoItem> item{std::make_unique<QPhotoItem>(filePath, ui->listWidget, items, itemsCount)};
+    std::unique_ptr<QPhotoItem> item{
+        std::make_unique<QPhotoItem>(filePath, ui->listWidget, items, itemsCount)};
 
     mainScene = new QGraphicsScene(this);
     mainScene->setSceneRect(0, 0, item->getSize().width(), item->getSize().height());
@@ -66,15 +68,41 @@ void PhotoEditorWindow::on_pushButton_clicked()
 
 void PhotoEditorWindow::on_pushButton_2_clicked() {}
 
-void PhotoEditorWindow::addItem(std::unique_ptr<QPhotoItem>& item, QString filePath)
+void PhotoEditorWindow::addItem(std::unique_ptr<QPhotoItem> &item, QString filePath)
 {
     item->setParentItem(layer);
     item->setPos(layer->getSize().width() / 2 - item->getSize().width() / 2,
                  layer->getSize().height() / 2 - item->getSize().height() / 2);
 
-    QListWidgetItem *listItem = new QListWidgetItem(item->getName(), ui->listWidget);
-    listItem->setIcon(QIcon(filePath));
+    QListWidgetItem *listItem = new QListWidgetItem(QIcon(filePath), item->getName(), ui->listWidget);
     listItem->setData(Qt::UserRole, QVariant(itemsCount));
     items.insert({itemsCount++, std::move(item)});
 }
 
+void PhotoEditorWindow::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Delete) {
+        if (ui->listWidget->selectedItems().size() > 0) {
+            items.erase(ui->listWidget->selectedItems()[0]->data(Qt::UserRole).toInt());
+            ui->listWidget->takeItem(ui->listWidget->row(ui->listWidget->selectedItems()[0]));
+        }
+    }
+    return QWidget::keyPressEvent(event);
+}
+
+void PhotoEditorWindow::on_listWidget_itemSelectionChanged()
+{
+    if (!(ui->listWidget->selectedItems().length() > 0
+          && items.at(ui->listWidget->selectedItems()[0]->data(Qt::UserRole).toInt())->isSelected())) {
+        for (auto &el : items) {
+            if (el.second->isSelected() == true) {
+                el.second->setSelected(false);
+                break;
+            }
+        }
+        if (ui->listWidget->selectedItems().length() > 0) {
+            items.at(ui->listWidget->selectedItems()[0]->data(Qt::UserRole).toInt())
+                ->setSelected(true);
+        }
+    }
+}
