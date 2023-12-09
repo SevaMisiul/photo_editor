@@ -23,11 +23,13 @@ public:
     ~PhotoEditorWindow();
 
 private slots:
-    void on_pushButton_clicked();
+    void on_btnAddItem_clicked();
+
+    void on_listItems_itemSelectionChanged();
+
+    void on_btnSave_clicked();
 
     void on_pushButton_2_clicked();
-
-    void on_listWidget_itemSelectionChanged();
 
 private:
     int itemsCount;
@@ -39,6 +41,7 @@ private:
 
 private:
     void addItem(std::unique_ptr<QPhotoItem> &item, QString filePath);
+    void updatePhotoView(QPhotoItem & item, QPhotoItem::PhotoItemChanged change);
 
     // QWidget interface
 protected:

@@ -13,6 +13,24 @@
   <property name="windowTitle">
    <string>PhotoEditorWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family: -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}
+
+QPushButton:hover {
+  background-color: #F3F4F6;
+}
+
+QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
@@ -71,7 +89,19 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QListWidget" name="listWidget">
+        <widget class="QToolButton" name="btnAddItem">
+         <property name="font">
+          <font>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listItems">
          <property name="maximumSize">
           <size>
            <width>300</width>
@@ -128,19 +158,26 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btnSave">
          <property name="font">
           <font>
-           <pointsize>11</pointsize>
+           <family>-apple-system</family>
+           <pointsize>-1</pointsize>
           </font>
          </property>
          <property name="text">
-          <string>Save</string>
+          <string>Save copy</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="pushButton_2">
+         <property name="font">
+          <font>
+           <family>-apple-system</family>
+           <pointsize>-1</pointsize>
+          </font>
+         </property>
          <property name="text">
           <string>PushButton</string>
          </property>

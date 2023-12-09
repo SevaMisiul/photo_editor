@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
         }
     }
 
+    a.setWindowIcon(QIcon("./resources/logo.png"));
     a.setStyle(QStyleFactory::create("Fusion"));
     StartDialog startDialog;
-    startDialog.setWindowTitle("New document");
     if (startDialog.exec() == QDialog::Accepted) {
         if (startDialog.getCreateMode() == StartDialog::CreateMode::create) {
             PhotoEditorWindow w(startDialog.getBackColor(),

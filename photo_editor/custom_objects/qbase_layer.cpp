@@ -1,6 +1,7 @@
 #include "qbase_layer.h"
 
 #include <QPainter>
+#include <QGraphicsScene>
 
 QBaseLayer::QBaseLayer(QSize size, QColor col)
     : layerSize(size)
@@ -18,16 +19,11 @@ QBaseLayer::QBaseLayer(int w, int h)
     , bgColor(255, 255, 255)
 {}
 
-void QBaseLayer::setSize(QSize size)
-{
-    layerSize = size;
-    update();
-}
-
-void QBaseLayer::setSize(int w, int h)
+void QBaseLayer::scale(int w, int h)
 {
     layerSize = QSize(w, h);
-    update();
+    scene()->setSceneRect(0, 0, w, h);
+    scene()->update();
 }
 
 QSize QBaseLayer::getSize()

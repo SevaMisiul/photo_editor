@@ -6,14 +6,12 @@
 #include <QPointF>
 
 QPhotoItem::QPhotoItem(QString filePath,
-                       QListWidget *listWidget,
                        std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items,
                        int id)
     : originalImage(filePath)
     , state(State::Disabled)
     , left(0)
     , top(0)
-    , listWidget(listWidget)
     , items(items)
     , id(id)
 {
@@ -169,6 +167,11 @@ QString QPhotoItem::getName()
     return name;
 }
 
+int QPhotoItem::getId()
+{
+    return id;
+}
+
 void QPhotoItem::rotateClockwise()
 {
     QTransform transform;
@@ -192,6 +195,11 @@ void QPhotoItem::rotateClockwise()
     croppedSize.setWidth(tmp);
 
     scene()->update();
+}
+
+void QPhotoItem::setViewUpdate(std::function<void (QPhotoItem &, PhotoItemChanged)> updateView)
+{
+    this->updateView = updateView;
 }
 
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
@@ -310,9 +318,14 @@ void QPhotoItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     switch (state) {
     case State::Resizing:
         resizeOnDrag(event->pos());
+        updateView(*this, PhotoItemChanged::ItemSizeChanged);
         break;
     case State::Cropping:
         croppOnDrag(event->pos());
+        updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        break;
+    case State::Moving:
+        updateView(*this, PhotoItemChanged::ItemPositionChanged);
         break;
     default:
         break;
@@ -402,10 +415,7 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
             setFlag(ItemIsMovable, false);
             setZValue(oldZValue);
         }
-        for (int i = 0; i < listWidget->count(); i++) {
-            if (listWidget->item(i)->data(Qt::UserRole).toInt() == id)
-                listWidget->item(i)->setSelected(isSelected());
-        }
+        updateView(*this, PhotoItemChanged::ItemSelectionChanged);
     }
 
     return QGraphicsItem::itemChange(change, value);

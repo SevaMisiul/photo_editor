@@ -10,8 +10,7 @@ public:
     QBaseLayer(QSize size);
     QBaseLayer(int w, int h);
 
-    void setSize(QSize size);
-    void setSize(int w, int h);
+    void scale(int w, int h);
     [[nodiscard]] QSize getSize();
 
     void setColor(QColor col);

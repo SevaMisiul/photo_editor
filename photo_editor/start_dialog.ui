@@ -13,6 +13,24 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family: -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}
+
+QPushButton:hover {
+  background-color: #F3F4F6;
+}
+
+QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout_7">
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -26,12 +44,15 @@
        </property>
        <property name="font">
         <font>
-         <family>Segoe UI</family>
-         <pointsize>11</pointsize>
+         <family>-apple-system</family>
+         <pointsize>-1</pointsize>
         </font>
        </property>
        <property name="text">
         <string>Open</string>
+       </property>
+       <property name="autoDefault">
+        <bool>false</bool>
        </property>
       </widget>
      </item>
@@ -115,6 +136,12 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
           <property name="maxLength">
            <number>256</number>
           </property>
@@ -145,6 +172,12 @@
             <height>16777215</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+           </font>
+          </property>
           <property name="maxLength">
            <number>5</number>
           </property>
@@ -174,6 +207,12 @@
             <width>200</width>
             <height>16777215</height>
            </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Segoe UI</family>
+            <pointsize>11</pointsize>
+           </font>
           </property>
           <property name="maxLength">
            <number>5</number>
@@ -218,6 +257,12 @@
               </item>
               <item>
                <widget class="QLineEdit" name="editR">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>255</string>
                 </property>
@@ -242,6 +287,12 @@
               </item>
               <item>
                <widget class="QLineEdit" name="editG">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>255</string>
                 </property>
@@ -266,6 +317,12 @@
               </item>
               <item>
                <widget class="QLineEdit" name="editB">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <pointsize>11</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string>255</string>
                 </property>
@@ -287,6 +344,9 @@
           </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
           </property>
           <property name="flat">
            <bool>false</bool>
@@ -314,12 +374,15 @@
          <widget class="QPushButton" name="btnClose">
           <property name="font">
            <font>
-            <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <family>-apple-system</family>
+            <pointsize>-1</pointsize>
            </font>
           </property>
           <property name="text">
            <string>Close</string>
+          </property>
+          <property name="autoDefault">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -340,8 +403,8 @@
          <widget class="QPushButton" name="btnCreate">
           <property name="font">
            <font>
-            <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <family>-apple-system</family>
+            <pointsize>-1</pointsize>
            </font>
           </property>
           <property name="text">

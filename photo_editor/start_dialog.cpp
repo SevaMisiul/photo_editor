@@ -23,7 +23,6 @@ StartDialog::StartDialog(QWidget *parent)
 
     connect(ui->btnClose, &QPushButton::clicked, this, &StartDialog::close);
     connect(ui->btnCreate, &QPushButton::clicked, this, &StartDialog::accept);
-    connect(ui->btnOpen, &QPushButton::clicked, this, &StartDialog::accept);
 
     ui->btnCreate->setDisabled(true);
 
@@ -31,6 +30,8 @@ StartDialog::StartDialog(QWidget *parent)
     ui->editG->setValidator(colorValidator);
     ui->editB->setValidator(colorValidator);
     setButtonColor();
+
+    setWindowTitle("New document");
 }
 
 QSize StartDialog::getSize()
@@ -89,8 +90,11 @@ void StartDialog::on_editHeight_textChanged(const QString &arg1)
 
 void StartDialog::on_btnOpen_clicked()
 {
-    filePath = QFileDialog::getOpenFileName(this, "Image", "", "Images (*.png *.jpg *.bmp)");
-    createMode = CreateMode::open;
+    filePath = QFileDialog::getOpenFileName(this, "Image", QDir::homePath() + "/Pictures/", "Images (*.png *.jpg *.bmp)");
+    if (!filePath.isEmpty()) {
+        createMode = CreateMode::open;
+        accept();
+    }
 }
 
 void StartDialog::on_editR_textEdited(const QString &arg1)
