@@ -31,7 +31,9 @@ int main(int argc, char *argv[])
             w.show();
             return a.exec();
         } else {
-            PhotoEditorWindow w(startDialog.getFilePath());
+            std::unique_ptr<QPhotoItem> item{std::make_unique<QPhotoItem>(startDialog.getFilePath(), 0)};
+            PhotoEditorWindow w(QColor(255, 255, 255), item->getSize(), item->getName());
+            w.addPhotoItem(item, startDialog.getFilePath());
             w.show();
             return a.exec();
         }

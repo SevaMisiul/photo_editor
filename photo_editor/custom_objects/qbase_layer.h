@@ -1,19 +1,18 @@
 #ifndef QBASELAYER_H
 #define QBASELAYER_H
 
-#include <QGraphicsRectItem>
+#include <QGraphicsItem>
 
-class QBaseLayer : public QGraphicsRectItem
+class QBaseLayer : public QGraphicsItem
 {
 public:
     QBaseLayer(QSize size, QColor col);
-    QBaseLayer(QSize size);
-    QBaseLayer(int w, int h);
 
     void scale(int w, int h);
     [[nodiscard]] QSize getSize();
 
     void setColor(QColor col);
+    void setViewUpdate(std::function<void(QBaseLayer &)> updateView);
 
     // QGraphicsItem interface
 public:
@@ -25,6 +24,12 @@ public:
 private:
     QColor bgColor;
     QSize layerSize;
+    std::function<void(QBaseLayer &)> updateView;
+
+    // QGraphicsItem interface
+protected:
+    virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 #endif // QBASELAYER_H

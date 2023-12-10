@@ -32,6 +32,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 		start_dialog.h start_dialog.cpp start_dialog.ui
 		color_validator/qcolor_validator.h color_validator/qcolor_validator.cpp
 		save_dialog.h save_dialog.cpp save_dialog.ui
+		custom_list_widget/qcustom_list_widget.h
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET photo_editor APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

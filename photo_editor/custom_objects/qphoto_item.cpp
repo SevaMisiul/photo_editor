@@ -5,15 +5,13 @@
 #include <QKeyEvent>
 #include <QPointF>
 
-QPhotoItem::QPhotoItem(QString filePath,
-                       std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items,
-                       int id)
+QPhotoItem::QPhotoItem(QString filePath, int id)
     : originalImage(filePath)
     , state(State::Disabled)
     , left(0)
     , top(0)
-    , items(items)
     , id(id)
+    , updateView(nullptr)
 {
     drawingPixmap = QPixmap::fromImage(originalImage);
     croppedSize = drawingPixmap.size();
@@ -22,14 +20,8 @@ QPhotoItem::QPhotoItem(QString filePath,
     setFlag(ItemIsFocusable);
     setAcceptHoverEvents(true);
 
-    name = "";
-    int i = filePath.length() - 1;
-    while (filePath[i] != '.' && i > 0) {
-        i--;
-    }
-    for (i--; i >= 0 && filePath[i] != '/'; i--) {
-        name = filePath[i] + name;
-    }
+    name = filePath.left(filePath.lastIndexOf('.'));
+    name = name.last(name.length() - (name.lastIndexOf('/') + 1));
 }
 
 void QPhotoItem::paintSelected(QPainter *painter)
@@ -162,6 +154,16 @@ QSize QPhotoItem::getSize()
     return drawingPixmap.size();
 }
 
+QSize QPhotoItem::getCroppedSize()
+{
+    return QSize(croppedSize.width(), croppedSize.height());
+}
+
+QPoint QPhotoItem::getPos()
+{
+    return QPoint(pos().x() + left, pos().y() + top);
+}
+
 QString QPhotoItem::getName()
 {
     return name;
@@ -197,9 +199,43 @@ void QPhotoItem::rotateClockwise()
     scene()->update();
 }
 
-void QPhotoItem::setViewUpdate(std::function<void (QPhotoItem &, PhotoItemChanged)> updateView)
+void QPhotoItem::setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView)
 {
     this->updateView = updateView;
+}
+
+void QPhotoItem::setCroppedPos(int x, int y)
+{
+    setPos(x - static_cast<int>(left), y - static_cast<int>(top));
+    scene()->update();
+}
+
+void QPhotoItem::resize(int width, int height)
+{
+    QPoint newPos(0, 0);
+    qreal coeffW = width / croppedSize.width();
+    drawingPixmapSize.setWidth(drawingPixmapSize.width() * coeffW);
+    qreal newLeft = left * coeffW;
+    newPos.setX(newPos.x() + (int) left - (int) newLeft);
+
+    qreal coeffH = height / croppedSize.height();
+    drawingPixmapSize.setHeight(drawingPixmapSize.height() * coeffH);
+    qreal newTop = top * coeffH;
+    newPos.setY(newPos.y() + (int) top - (int) newTop);
+
+    moveBy(newPos.x(), newPos.y());
+
+    QTransform transform;
+    qreal transformX = drawingPixmapSize.width() / originalImage.width();
+    qreal transformY = drawingPixmapSize.height() / originalImage.height();
+    transform.scale(transformX, transformY);
+    drawingPixmap = QPixmap::fromImage(originalImage)
+                        .transformed(transform, Qt::SmoothTransformation);
+
+    left = newLeft;
+    top = newTop;
+    croppedSize = QSize(width, height);
+    scene()->update();
 }
 
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
@@ -318,14 +354,20 @@ void QPhotoItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     switch (state) {
     case State::Resizing:
         resizeOnDrag(event->pos());
-        updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        if (updateView) {
+            updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        }
         break;
     case State::Cropping:
         croppOnDrag(event->pos());
-        updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        if (updateView) {
+            updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        }
         break;
     case State::Moving:
-        updateView(*this, PhotoItemChanged::ItemPositionChanged);
+        if (updateView) {
+            updateView(*this, PhotoItemChanged::ItemPositionChanged);
+        }
         break;
     default:
         break;
@@ -409,13 +451,21 @@ QVariant QPhotoItem::itemChange(GraphicsItemChange change, const QVariant &value
             state = State::Selected;
             oldZValue = zValue();
             setZValue(std::numeric_limits<double>::max());
+            for (auto item : scene()->selectedItems()) {
+                if (item != this) {
+                    item->setSelected(false);
+                }
+            }
         } else {
             scene()->update();
             state = State::Disabled;
             setFlag(ItemIsMovable, false);
             setZValue(oldZValue);
         }
-        updateView(*this, PhotoItemChanged::ItemSelectionChanged);
+    } else if (change == ItemSelectedChange) {
+        if (isSelected() != value.toBool() && updateView) {
+            updateView(*this, PhotoItemChanged::ItemSelectionChanged);
+        }
     }
 
     return QGraphicsItem::itemChange(change, value);

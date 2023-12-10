@@ -4,14 +4,15 @@
 
 #include <QFileDialog>
 #include <QKeyEvent>
-#include <QString>
 #include <QMessageBox>
+#include <QString>
 
 PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name, QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::PhotoEditorWindow)
     , projectName(name)
     , items{}
+    , listWidgetItems{}
     , itemsCount{0}
 {
     ui->setupUi(this);
@@ -24,34 +25,42 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     ui->mainGraphView->setBackgroundBrush(QBrush(Qt::gray));
 
     layer = new QBaseLayer(bgSize, bgColor);
+    layer->setViewUpdate(
+        std::bind(&PhotoEditorWindow::updateLayerView, this, std::placeholders::_1));
+
+    auto listWidgetItem = std::make_unique<QListWidgetItem>("Background", ui->listItems);
+    listWidgetItem->setData(Qt::UserRole, QVariant(-1));
+    listWidgetItems.emplace(-1, std::move(listWidgetItem));
+
     mainScene->addItem(layer);
 
     setWindowTitle(projectName + " - Photo editor");
-}
 
-PhotoEditorWindow::PhotoEditorWindow(QString filePath, QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::PhotoEditorWindow)
-    , items{}
-    , itemsCount{0}
-{
-    ui->setupUi(this);
+    QIntValidator *posValidator = new QIntValidator(-9999, 9999);
+    ui->edtX->setValidator(posValidator);
+    ui->edtY->setValidator(posValidator);
+    connect(ui->edtX,
+            &QLineEdit::editingFinished,
+            this,
+            &PhotoEditorWindow::on_edtPos_editingFinished);
+    connect(ui->edtY,
+            &QLineEdit::editingFinished,
+            this,
+            &PhotoEditorWindow::on_edtPos_editingFinished);
+    QIntValidator *sizeValidator = new QIntValidator(1, 9999);
+    ui->edtWidth->setValidator(sizeValidator);
+    ui->edtHeight->setValidator(sizeValidator);
+    connect(ui->edtWidth,
+            &QLineEdit::editingFinished,
+            this,
+            &PhotoEditorWindow::on_edtSize_editingFinished);
+    connect(ui->edtHeight,
+            &QLineEdit::editingFinished,
+            this,
+            &PhotoEditorWindow::on_edtSize_editingFinished);
 
-    std::unique_ptr<QPhotoItem> item{std::make_unique<QPhotoItem>(filePath, items, itemsCount)};
-
-    mainScene = new QGraphicsScene(this);
-    mainScene->setSceneRect(0, 0, item->getSize().width(), item->getSize().height());
-
-    ui->mainGraphView->setScene(mainScene);
-    ui->mainGraphView->setMouseTracking(true);
-    ui->mainGraphView->setBackgroundBrush(QBrush(Qt::gray));
-
-    layer = new QBaseLayer(item->getSize(), QColor(255, 255, 255));
-    mainScene->addItem(layer);
-
-    setWindowTitle(item->getName() + " - Photo editor");
-    projectName = item->getName();
-    addItem(item, filePath);
+    ui->gbSize->setVisible(false);
+    ui->gbPos->setVisible(false);
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -61,14 +70,18 @@ PhotoEditorWindow::~PhotoEditorWindow()
     delete layer;
 }
 
-void PhotoEditorWindow::addItem(std::unique_ptr<QPhotoItem> &item, QString filePath)
+void PhotoEditorWindow::addPhotoItem(std::unique_ptr<QPhotoItem> &item, QString filePath)
 {
     item->setParentItem(layer);
     item->setPos(layer->getSize().width() / 2 - item->getSize().width() / 2,
                  layer->getSize().height() / 2 - item->getSize().height() / 2);
 
-    QListWidgetItem *listItem = new QListWidgetItem(QIcon(filePath), item->getName(), ui->listItems);
-    listItem->setData(Qt::UserRole, QVariant(itemsCount));
+    auto listWidgetItem = std::make_unique<QListWidgetItem>(QIcon(filePath),
+                                                            item->getName(),
+                                                            ui->listItems);
+    listWidgetItem->setData(Qt::UserRole, QVariant(itemsCount));
+    listWidgetItems.emplace(itemsCount, std::move(listWidgetItem));
+
     item->setViewUpdate(std::bind(&PhotoEditorWindow::updatePhotoView,
                                   this,
                                   std::placeholders::_1,
@@ -80,51 +93,57 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
 {
     switch (change) {
     case QPhotoItem::PhotoItemChanged::ItemSelectionChanged:
-        for (int i = 0; i < ui->listItems->count(); i++) {
-            if (ui->listItems->item(i)->data(Qt::UserRole).toInt() == item.getId()
-                && (ui->listItems->item(i)->isSelected() != item.isSelected()))
-                ui->listItems->item(i)->setSelected(item.isSelected());
-        }
+        listWidgetItems.at(item.getId())->setSelected(!item.isSelected());
+        ui->gbPos->setVisible(!item.isSelected());
+        ui->gbSize->setVisible(!item.isSelected());
+        ui->edtWidth->setText(QString::number(item.getCroppedSize().width()));
+        ui->edtHeight->setText(QString::number(item.getCroppedSize().height()));
+        ui->edtX->setText(QString::number(item.getPos().x()));
+        ui->edtY->setText(QString::number(item.getPos().y()));
         break;
-    default:
+    case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
+        ui->edtX->setText(QString::number(item.getPos().x()));
+        ui->edtY->setText(QString::number(item.getPos().y()));
+        ui->edtWidth->setText(QString::number(item.getCroppedSize().width()));
+        ui->edtHeight->setText(QString::number(item.getCroppedSize().height()));
+        break;
+    case QPhotoItem::PhotoItemChanged::ItemPositionChanged:
+        ui->edtX->setText(QString::number(item.getPos().x()));
+        ui->edtY->setText(QString::number(item.getPos().y()));
         break;
     }
+}
+
+void PhotoEditorWindow::updateLayerView(QBaseLayer &layer)
+{
+    listWidgetItems.at(-1)->setSelected(!layer.isSelected());
+    ui->gbSize->setVisible(!layer.isSelected());
+    ui->edtWidth->setText(QString::number(layer.getSize().width()));
+    ui->edtHeight->setText(QString::number(layer.getSize().height()));
 }
 
 void PhotoEditorWindow::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Delete) {
-        if (ui->listItems->selectedItems().size() > 0) {
-            items.erase(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt());
-            ui->listItems->takeItem(ui->listItems->row(ui->listItems->selectedItems()[0]));
+    if (ui->listItems->selectedItems().size() > 0
+        && ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt() != -1) {
+        if (event->key() == Qt::Key_Delete) {
+            int id = ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt();
+            items.erase(id);
+            listWidgetItems.erase(id);
         }
     }
-    return QWidget::keyPressEvent(event);
+    QMainWindow::keyPressEvent(event);
 }
 
 void PhotoEditorWindow::on_btnAddItem_clicked()
 {
-    QString filePath = QFileDialog::getOpenFileName(this, "Image", QDir::homePath() + "/Pictures/", "Images (*.png *.jpg *.bmp)");
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    "Image",
+                                                    QDir::homePath() + "/Pictures/",
+                                                    "Images (*.png *.jpg *.bmp)");
     if (!filePath.isEmpty()) {
-        auto item = std::make_unique<QPhotoItem>(filePath, items, itemsCount);
-        addItem(item, filePath);
-    }
-}
-
-void PhotoEditorWindow::on_listItems_itemSelectionChanged()
-{
-    if (!(ui->listItems->selectedItems().length() > 0
-          && items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->isSelected())) {
-        for (auto &el : items) {
-            if (el.second->isSelected() == true) {
-                el.second->setSelected(false);
-                break;
-            }
-        }
-        if (ui->listItems->selectedItems().length() > 0) {
-            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
-                ->setSelected(true);
-        }
+        auto item = std::make_unique<QPhotoItem>(filePath, itemsCount);
+        addPhotoItem(item, filePath);
     }
 }
 
@@ -132,7 +151,12 @@ void PhotoEditorWindow::on_btnSave_clicked()
 {
     SaveDialog saveDialog(projectName);
     if (ui->listItems->selectedItems().size() > 0) {
-        items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setSelected(false);
+        int id = ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt();
+        if (id == -1) {
+            layer->setSelected(false);
+        } else {
+            items.at(id)->setSelected(false);
+        }
     }
     if (saveDialog.exec()) {
         QImage image(layer->getSize(), QImage::Format_ARGB32);
@@ -151,6 +175,36 @@ void PhotoEditorWindow::on_btnSave_clicked()
 void PhotoEditorWindow::on_pushButton_2_clicked()
 {
     layer->scale(300, 300);
-    mainScene->update();
 }
 
+void PhotoEditorWindow::on_listItems_itemClicked(QListWidgetItem *item)
+{
+    for (auto photoItem : mainScene->selectedItems()) {
+        photoItem->setSelected(false);
+    }
+    int data = item->data(Qt::UserRole).toInt();
+    if (data == -1) {
+        layer->setSelected(true);
+    } else {
+        items.at(data)->setSelected(true);
+    }
+}
+
+void PhotoEditorWindow::on_edtPos_editingFinished()
+{
+    if (ui->edtX->text().isEmpty()) {
+        ui->edtX->setText("0");
+    }
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
+        ->setCroppedPos(ui->edtX->text().toInt(), ui->edtY->text().toInt());
+}
+
+void PhotoEditorWindow::on_edtSize_editingFinished()
+{
+    int id = ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt();
+    if (id == -1) {
+        layer->scale(ui->edtWidth->text().toInt(), ui->edtHeight->text().toInt());
+    } else {
+        items.at(id)->resize(ui->edtWidth->text().toInt(), ui->edtHeight->text().toInt());
+    }
+}

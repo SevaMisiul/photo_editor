@@ -19,17 +19,17 @@ class PhotoEditorWindow : public QMainWindow
 
 public:
     PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name, QWidget *parent = nullptr);
-    PhotoEditorWindow(QString filePath, QWidget *parent = nullptr);
     ~PhotoEditorWindow();
+    void addPhotoItem(std::unique_ptr<QPhotoItem> &item, QString filePath);
 
 private slots:
     void on_btnAddItem_clicked();
 
-    void on_listItems_itemSelectionChanged();
-
     void on_btnSave_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_listItems_itemClicked(QListWidgetItem *item);
 
 private:
     int itemsCount;
@@ -37,11 +37,14 @@ private:
     QGraphicsScene *mainScene;
     QString projectName;
     std::unordered_map<int, std::unique_ptr<QPhotoItem>> items;
+    std::unordered_map<int, std::unique_ptr<QListWidgetItem>> listWidgetItems;
     QBaseLayer *layer;
 
 private:
-    void addItem(std::unique_ptr<QPhotoItem> &item, QString filePath);
-    void updatePhotoView(QPhotoItem & item, QPhotoItem::PhotoItemChanged change);
+    void updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemChanged change);
+    void updateLayerView(QBaseLayer &layer);
+    void on_edtPos_editingFinished();
+    void on_edtSize_editingFinished();
 
     // QWidget interface
 protected:

@@ -9,9 +9,7 @@
 class QPhotoItem : public QGraphicsItem
 {
 public:
-    QPhotoItem(QString filePath,
-               std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items,
-               int id);
+    QPhotoItem(QString filePath, int id);
 
     enum class PhotoItemChanged { ItemPositionChanged, ItemSizeChanged, ItemSelectionChanged };
 
@@ -23,9 +21,8 @@ private:
     QPointF cursorPosBefore, itemPosBefore;
     qreal top, left, topBefore, leftBefore;
     qreal oldZValue;
-    std::unordered_map<int, std::unique_ptr<QPhotoItem>> &items;
     int id;
-    std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;;
+    std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;
 
     void paintSelected(QPainter *painter);
     void paintCropping(QPainter *painter);
@@ -35,10 +32,14 @@ private:
 
 public:
     [[nodiscard]] QSize getSize();
+    [[nodiscard]] QSize getCroppedSize();
+    [[nodiscard]] QPoint getPos();
     [[nodiscard]] QString getName();
     [[nodiscard]] int getId();
     void rotateClockwise();
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
+    void setCroppedPos(int x, int y);
+    void resize(int width, int height);
 
 protected:
     void resizeOnDrag(QPointF delta);

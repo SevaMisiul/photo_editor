@@ -19,7 +19,7 @@
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   color: #24292E;
-  font-family: -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
   font-size: 16px;
   line-height: 18px;
   padding: 3px 16px;
@@ -139,7 +139,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="maxLength">
@@ -175,7 +175,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="maxLength">
@@ -211,7 +211,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="maxLength">
@@ -260,7 +260,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -290,7 +290,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -320,7 +320,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
