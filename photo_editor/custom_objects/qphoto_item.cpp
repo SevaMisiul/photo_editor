@@ -196,6 +196,10 @@ void QPhotoItem::rotateClockwise()
     croppedSize.setHeight(croppedSize.width());
     croppedSize.setWidth(tmp);
 
+    if (updateView) {
+        updateView(*this, PhotoItemChanged::ItemSizeChanged);
+        updateView(*this, PhotoItemChanged::ItemPositionChanged);
+    }
     scene()->update();
 }
 
@@ -235,6 +239,28 @@ void QPhotoItem::resize(int width, int height)
     left = newLeft;
     top = newTop;
     croppedSize = QSize(width, height);
+    scene()->update();
+}
+
+void QPhotoItem::flipH()
+{
+    QTransform transform;
+    transform.scale(-1, 1);
+
+    originalImage = originalImage.transformed(transform);
+    drawingPixmap = drawingPixmap.transformed(transform);
+
+    scene()->update();
+}
+
+void QPhotoItem::flipV()
+{
+    QTransform transform;
+    transform.scale(1, -1);
+
+    originalImage = originalImage.transformed(transform);
+    drawingPixmap = drawingPixmap.transformed(transform);
+
     scene()->update();
 }
 

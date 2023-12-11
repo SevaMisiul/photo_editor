@@ -31,15 +31,22 @@
   border: 1px solid rgba(27, 31, 35, 0.15);
   border-radius: 6px;
   color: #24292E;
-  font-family: -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
   font-size: 16px;
   line-height: 18px;
   padding: 3px 16px;
 }
 
 QPushButton:hover {
-  background-color: #F3F4F6;
-}</string>
+  background-color: #e4e7eb;
+}
+
+QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }
+
+QPushButton:pressed {
+    background-color: #939393;
+}
+</string>
   </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
@@ -122,7 +129,7 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
     </item>
    </layout>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>50</x>

@@ -40,6 +40,8 @@ public:
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
     void setCroppedPos(int x, int y);
     void resize(int width, int height);
+    void flipH();
+    void flipV();
 
 protected:
     void resizeOnDrag(QPointF delta);

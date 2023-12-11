@@ -31,6 +31,12 @@ private slots:
 
     void on_listItems_itemClicked(QListWidgetItem *item);
 
+    void on_btnRotate_clicked();
+
+    void on_btnFlipH_clicked();
+
+    void on_btnFlipV_clicked();
+
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;

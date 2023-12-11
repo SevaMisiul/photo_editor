@@ -26,10 +26,15 @@
 }
 
 QPushButton:hover {
-  background-color: #F3F4F6;
+  background-color: #e4e7eb;
 }
 
-QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
+QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }
+
+QPushButton:pressed {
+    background-color: #939393;
+}
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_7">
    <item>

@@ -61,6 +61,10 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
 
     ui->gbSize->setVisible(false);
     ui->gbPos->setVisible(false);
+    ui->gbTranspose->setVisible(false);
+    ui->btnRotate->setIcon(QIcon("./resources/rotate.png"));
+    ui->btnFlipH->setIcon(QIcon("./resources/flipH.png"));
+    ui->btnFlipV->setIcon(QIcon("./resources/flipV.png"));
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -96,10 +100,15 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
         listWidgetItems.at(item.getId())->setSelected(!item.isSelected());
         ui->gbPos->setVisible(!item.isSelected());
         ui->gbSize->setVisible(!item.isSelected());
-        ui->edtWidth->setText(QString::number(item.getCroppedSize().width()));
-        ui->edtHeight->setText(QString::number(item.getCroppedSize().height()));
-        ui->edtX->setText(QString::number(item.getPos().x()));
-        ui->edtY->setText(QString::number(item.getPos().y()));
+        ui->gbTranspose->setVisible(!item.isSelected());
+
+        if (!item.isSelected()) {
+            ui->edtWidth->setText(QString::number(item.getCroppedSize().width()));
+            ui->edtHeight->setText(QString::number(item.getCroppedSize().height()));
+
+            ui->edtX->setText(QString::number(item.getPos().x()));
+            ui->edtY->setText(QString::number(item.getPos().y()));
+        }
         break;
     case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
         ui->edtX->setText(QString::number(item.getPos().x()));
@@ -208,3 +217,20 @@ void PhotoEditorWindow::on_edtSize_editingFinished()
         items.at(id)->resize(ui->edtWidth->text().toInt(), ui->edtHeight->text().toInt());
     }
 }
+
+void PhotoEditorWindow::on_btnRotate_clicked()
+{
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->rotateClockwise();
+}
+
+void PhotoEditorWindow::on_btnFlipH_clicked()
+{
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->flipH();
+}
+
+
+void PhotoEditorWindow::on_btnFlipV_clicked()
+{
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->flipV();
+}
+
