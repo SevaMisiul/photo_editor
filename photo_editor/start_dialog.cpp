@@ -29,6 +29,7 @@ StartDialog::StartDialog(QWidget *parent)
     ui->editR->setValidator(colorValidator);
     ui->editG->setValidator(colorValidator);
     ui->editB->setValidator(colorValidator);
+    ui->editA->setValidator(colorValidator);
     setButtonColor();
 
     setWindowTitle("New document");
@@ -46,7 +47,7 @@ QString StartDialog::getProjectName()
 
 QColor StartDialog::getBackColor()
 {
-    return QColor(r, g, b);
+    return QColor(r, g, b, ui->editA->text().toInt());
 }
 
 StartDialog::CreateMode StartDialog::getCreateMode()

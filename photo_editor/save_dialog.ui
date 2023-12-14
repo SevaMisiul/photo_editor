@@ -211,12 +211,12 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
         </property>
         <item>
          <property name="text">
-          <string>JPEG</string>
+          <string>PNG</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>PNG</string>
+          <string>JPEG</string>
          </property>
         </item>
         <item>
@@ -261,6 +261,10 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
         </property>
         <property name="text">
          <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="resource.qrc">
+          <normaloff>:/res/resources/file.png</normaloff>:/res/resources/file.png</iconset>
         </property>
         <property name="iconSize">
          <size>
@@ -333,6 +337,8 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

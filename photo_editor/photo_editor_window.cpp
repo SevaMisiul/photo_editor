@@ -62,9 +62,8 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     ui->gbSize->setVisible(false);
     ui->gbPos->setVisible(false);
     ui->gbTranspose->setVisible(false);
-    ui->btnRotate->setIcon(QIcon("./resources/rotate.png"));
-    ui->btnFlipH->setIcon(QIcon("./resources/flipH.png"));
-    ui->btnFlipV->setIcon(QIcon("./resources/flipV.png"));
+    ui->btnUp->setVisible(false);
+    ui->gbFilters->setVisible(false);
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -101,6 +100,8 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
         ui->gbPos->setVisible(!item.isSelected());
         ui->gbSize->setVisible(!item.isSelected());
         ui->gbTranspose->setVisible(!item.isSelected());
+        ui->btnUp->setVisible(!item.isSelected());
+        ui->gbFilters->setVisible(!item.isSelected());
 
         if (!item.isSelected()) {
             ui->edtWidth->setText(QString::number(item.getCroppedSize().width()));
@@ -108,6 +109,8 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
 
             ui->edtX->setText(QString::number(item.getPos().x()));
             ui->edtY->setText(QString::number(item.getPos().y()));
+
+            ui->sliderAlpha->setValue(item.getAlpha());
         }
         break;
     case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
@@ -137,6 +140,7 @@ void PhotoEditorWindow::keyPressEvent(QKeyEvent *event)
         && ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt() != -1) {
         if (event->key() == Qt::Key_Delete) {
             int id = ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt();
+            items.at(id)->setSelected(false);
             items.erase(id);
             listWidgetItems.erase(id);
         }
@@ -173,7 +177,9 @@ void PhotoEditorWindow::on_btnSave_clicked()
         mainScene->render(&painter);
         painter.end();
 
-        if (image.save(saveDialog.getFilePath(), nullptr, saveDialog.getQuality())) {
+        if (image.save(saveDialog.getFilePath(),
+                       saveDialog.getFormat().toUtf8(),
+                       saveDialog.getQuality())) {
             QMessageBox::information(nullptr, "Success", "Your image was successfully saved!");
         } else {
             QMessageBox::warning(nullptr, "Error", "Failed to saved the image.");
@@ -228,9 +234,18 @@ void PhotoEditorWindow::on_btnFlipH_clicked()
     items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->flipH();
 }
 
-
 void PhotoEditorWindow::on_btnFlipV_clicked()
 {
     items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->flipV();
 }
 
+void PhotoEditorWindow::on_btnUp_clicked()
+{
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->up();
+}
+
+void PhotoEditorWindow::on_sliderAlpha_valueChanged(int value)
+{
+    ui->edtAlpha->setText(QString::number(value));
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setAlpha(value);
+}

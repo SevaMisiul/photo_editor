@@ -8,6 +8,8 @@
 
 class QPhotoItem : public QGraphicsItem
 {
+    static inline int nexZValue{0};
+
 public:
     QPhotoItem(QString filePath, int id);
 
@@ -15,13 +17,14 @@ public:
 
 private:
     QString name;
-    QImage originalImage;
+    QImage filteredImage;
     QPixmap drawingPixmap;
     QSizeF croppedSize, sizeBefore, drawingPixmapSize;
     QPointF cursorPosBefore, itemPosBefore;
-    qreal top, left, topBefore, leftBefore;
+    qreal top{0}, left{0}, topBefore, leftBefore;
     qreal oldZValue;
     int id;
+    int alpha{0};
     std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;
 
     void paintSelected(QPainter *painter);
@@ -36,12 +39,15 @@ public:
     [[nodiscard]] QPoint getPos();
     [[nodiscard]] QString getName();
     [[nodiscard]] int getId();
-    void rotateClockwise();
+    [[nodiscard]] int getAlpha();
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
     void setCroppedPos(int x, int y);
+    void up();
+    void rotateClockwise();
     void resize(int width, int height);
     void flipH();
     void flipV();
+    void setAlpha(int alpha);
 
 protected:
     void resizeOnDrag(QPointF delta);

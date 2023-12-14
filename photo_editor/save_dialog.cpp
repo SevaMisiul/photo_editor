@@ -14,7 +14,6 @@ SaveDialog::SaveDialog(QString projectName, QWidget *parent)
     connect(ui->btnCancel, &QPushButton::clicked, this, &SaveDialog::close);
     connect(ui->btnSave, &QPushButton::clicked, this, &SaveDialog::accept);
 
-    ui->btnFilePath->setIcon(QIcon("./resources/file.png"));
     ui->edtPath->setText(QDir::homePath() + "/Pictures/" + ui->edtName->text());
 
     setWindowTitle("Save");

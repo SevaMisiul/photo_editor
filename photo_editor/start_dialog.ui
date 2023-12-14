@@ -72,7 +72,7 @@ QPushButton:pressed {
        <property name="font">
         <font>
          <family>Segoe UI</family>
-         <pointsize>11</pointsize>
+         <pointsize>10</pointsize>
         </font>
        </property>
        <property name="title">
@@ -84,9 +84,15 @@ QPushButton:pressed {
    </item>
    <item>
     <widget class="QGroupBox" name="gbProjectDetails">
+     <property name="minimumSize">
+      <size>
+       <width>300</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="maximumSize">
       <size>
-       <width>270</width>
+       <width>300</width>
        <height>16777215</height>
       </size>
      </property>
@@ -125,7 +131,7 @@ QPushButton:pressed {
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="text">
@@ -161,7 +167,7 @@ QPushButton:pressed {
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="text">
@@ -197,7 +203,7 @@ QPushButton:pressed {
           <property name="font">
            <font>
             <family>Segoe UI</family>
-            <pointsize>11</pointsize>
+            <pointsize>10</pointsize>
            </font>
           </property>
           <property name="text">
@@ -228,6 +234,9 @@ QPushButton:pressed {
       </item>
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
+        <property name="spacing">
+         <number>10</number>
+        </property>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
@@ -235,7 +244,7 @@ QPushButton:pressed {
             <property name="font">
              <font>
               <family>Segoe UI</family>
-              <pointsize>11</pointsize>
+              <pointsize>10</pointsize>
              </font>
             </property>
             <property name="text">
@@ -245,14 +254,26 @@ QPushButton:pressed {
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="spacing">
+             <number>10</number>
+            </property>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <property name="spacing">
+               <number>5</number>
+              </property>
               <item>
                <widget class="QLabel" name="labelR">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -262,6 +283,12 @@ QPushButton:pressed {
               </item>
               <item>
                <widget class="QLineEdit" name="editR">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
@@ -277,12 +304,21 @@ QPushButton:pressed {
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>5</number>
+              </property>
               <item>
                <widget class="QLabel" name="labelG">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -292,6 +328,12 @@ QPushButton:pressed {
               </item>
               <item>
                <widget class="QLineEdit" name="editG">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
@@ -307,12 +349,21 @@ QPushButton:pressed {
             </item>
             <item>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <property name="spacing">
+               <number>5</number>
+              </property>
               <item>
                <widget class="QLabel" name="labelB">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
-                  <pointsize>11</pointsize>
+                  <pointsize>10</pointsize>
                  </font>
                 </property>
                 <property name="text">
@@ -322,9 +373,58 @@ QPushButton:pressed {
               </item>
               <item>
                <widget class="QLineEdit" name="editB">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
                 <property name="font">
                  <font>
                   <family>Segoe UI</family>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>255</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <property name="spacing">
+               <number>5</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="labelA">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>A:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="editA">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
                   <pointsize>10</pointsize>
                  </font>
                 </property>
@@ -342,6 +442,12 @@ QPushButton:pressed {
         <item>
          <widget class="QPushButton" name="btnColor">
           <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
            <size>
             <width>50</width>
             <height>50</height>

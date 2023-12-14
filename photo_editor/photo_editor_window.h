@@ -37,6 +37,10 @@ private slots:
 
     void on_btnFlipV_clicked();
 
+    void on_btnUp_clicked();
+
+    void on_sliderAlpha_valueChanged(int value);
+
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;

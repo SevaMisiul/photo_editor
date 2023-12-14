@@ -6,19 +6,18 @@
 #include <QPointF>
 
 QPhotoItem::QPhotoItem(QString filePath, int id)
-    : originalImage(filePath)
+    : filteredImage(filePath)
     , state(State::Disabled)
-    , left(0)
-    , top(0)
-    , id(id)
     , updateView(nullptr)
+    ,id (id)
 {
-    drawingPixmap = QPixmap::fromImage(originalImage);
+    drawingPixmap = QPixmap::fromImage(filteredImage);
     croppedSize = drawingPixmap.size();
     drawingPixmapSize = drawingPixmap.size();
     setFlag(ItemIsSelectable);
     setFlag(ItemIsFocusable);
     setAcceptHoverEvents(true);
+    setZValue(nexZValue++);
 
     name = filePath.left(filePath.lastIndexOf('.'));
     name = name.last(name.length() - (name.lastIndexOf('/') + 1));
@@ -174,6 +173,11 @@ int QPhotoItem::getId()
     return id;
 }
 
+int QPhotoItem::getAlpha()
+{
+    return this->alpha;
+}
+
 void QPhotoItem::rotateClockwise()
 {
     QTransform transform;
@@ -188,8 +192,8 @@ void QPhotoItem::rotateClockwise()
     left = bottom;
     top = tmp;
 
-    originalImage = originalImage.transformed(transform, Qt::SmoothTransformation);
-    drawingPixmap = drawingPixmap.transformed(transform, Qt::SmoothTransformation);
+    filteredImage = filteredImage.transformed(transform);
+    drawingPixmap = drawingPixmap.transformed(transform);
     drawingPixmapSize = drawingPixmap.size();
 
     tmp = croppedSize.height();
@@ -214,6 +218,11 @@ void QPhotoItem::setCroppedPos(int x, int y)
     scene()->update();
 }
 
+void QPhotoItem::up()
+{
+    oldZValue = nexZValue++;
+}
+
 void QPhotoItem::resize(int width, int height)
 {
     QPoint newPos(0, 0);
@@ -230,10 +239,10 @@ void QPhotoItem::resize(int width, int height)
     moveBy(newPos.x(), newPos.y());
 
     QTransform transform;
-    qreal transformX = drawingPixmapSize.width() / originalImage.width();
-    qreal transformY = drawingPixmapSize.height() / originalImage.height();
+    qreal transformX = drawingPixmapSize.width() / filteredImage.width();
+    qreal transformY = drawingPixmapSize.height() / filteredImage.height();
     transform.scale(transformX, transformY);
-    drawingPixmap = QPixmap::fromImage(originalImage)
+    drawingPixmap = QPixmap::fromImage(filteredImage)
                         .transformed(transform, Qt::SmoothTransformation);
 
     left = newLeft;
@@ -247,7 +256,7 @@ void QPhotoItem::flipH()
     QTransform transform;
     transform.scale(-1, 1);
 
-    originalImage = originalImage.transformed(transform);
+    filteredImage = filteredImage.transformed(transform);
     drawingPixmap = drawingPixmap.transformed(transform);
 
     scene()->update();
@@ -258,10 +267,24 @@ void QPhotoItem::flipV()
     QTransform transform;
     transform.scale(1, -1);
 
-    originalImage = originalImage.transformed(transform);
+    filteredImage = filteredImage.transformed(transform);
     drawingPixmap = drawingPixmap.transformed(transform);
 
     scene()->update();
+}
+
+void QPhotoItem::setAlpha(int alpha)
+{
+    this->alpha = alpha;
+    //    for (int y = 0; y < filteredImage.height(); ++y) {
+    //        QRgb *line = reinterpret_cast<QRgb*>(filteredImage.scanLine(y));
+    //        for (int x = 0; x < filteredImage.width(); ++x) {
+    //            QRgb &rgb = line[x];
+    //            rgb = qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), alpha);
+    //        }
+    //    }
+    //    drawingPixmap = QPixmap::fromImage(filteredImage);
+    //    update();
 }
 
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
@@ -295,10 +318,10 @@ void QPhotoItem::resizeOnDrag(QPointF cursorPos)
     moveBy(newPos.x(), newPos.y());
 
     QTransform transform;
-    qreal transformX = drawingPixmapSize.width() / originalImage.width();
-    qreal transformY = drawingPixmapSize.height() / originalImage.height();
+    qreal transformX = drawingPixmapSize.width() / filteredImage.width();
+    qreal transformY = drawingPixmapSize.height() / filteredImage.height();
     transform.scale(transformX, transformY);
-    drawingPixmap = QPixmap::fromImage(originalImage)
+    drawingPixmap = QPixmap::fromImage(filteredImage)
                         .transformed(transform, Qt::SmoothTransformation);
 
     left = newLeft;

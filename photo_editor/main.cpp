@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    a.setWindowIcon(QIcon("./resources/logo.png"));
+    a.setWindowIcon(QIcon(":/res/resources/logo.png"));
     a.setStyle(QStyleFactory::create("Fusion"));
     StartDialog startDialog;
     if (startDialog.exec() == QDialog::Accepted) {
