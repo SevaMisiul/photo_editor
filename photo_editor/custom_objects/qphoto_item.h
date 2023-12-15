@@ -24,22 +24,26 @@ private:
     qreal top{0}, left{0}, topBefore, leftBefore;
     qreal oldZValue;
     int id;
-    int alpha{0};
+    int alpha{255};
+    int brightness{0};
     std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;
 
     void paintSelected(QPainter *painter);
     void paintCropping(QPainter *painter);
+    void applyChanges();
 
     enum class State { Disabled = 0, Resizing, Cropping, Moving, Selected };
     State state;
 
 public:
-    [[nodiscard]] QSize getSize();
-    [[nodiscard]] QSize getCroppedSize();
-    [[nodiscard]] QPoint getPos();
-    [[nodiscard]] QString getName();
-    [[nodiscard]] int getId();
-    [[nodiscard]] int getAlpha();
+    [[nodiscard]] QSize getSize() const;
+    [[nodiscard]] QSize getCroppedSize() const;
+    [[nodiscard]] QPoint getPos() const;
+    [[nodiscard]] QString getName() const;
+    [[nodiscard]] int getId() const;
+    [[nodiscard]] int getAlpha() const;
+    [[nodiscard]] int getBrightness() const;
+    void setBrightness(int newBrightness);
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
     void setCroppedPos(int x, int y);
     void up();
@@ -48,6 +52,7 @@ public:
     void flipH();
     void flipV();
     void setAlpha(int alpha);
+    void monochromeize();
 
 protected:
     void resizeOnDrag(QPointF delta);

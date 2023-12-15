@@ -9,8 +9,9 @@ QPhotoItem::QPhotoItem(QString filePath, int id)
     : filteredImage(filePath)
     , state(State::Disabled)
     , updateView(nullptr)
-    ,id (id)
+    , id(id)
 {
+    filteredImage = filteredImage.convertToFormat(QImage::Format_ARGB32);
     drawingPixmap = QPixmap::fromImage(filteredImage);
     croppedSize = drawingPixmap.size();
     drawingPixmapSize = drawingPixmap.size();
@@ -148,34 +149,124 @@ void QPhotoItem::paintCropping(QPainter *painter)
     painter->fillRect(rightTopRightRect.adjusted(1, 1, 0, 0), Qt::black);
 }
 
-QSize QPhotoItem::getSize()
+void QPhotoItem::applyChanges()
+{
+    QTransform transform;
+    qreal transformX = drawingPixmapSize.width() / filteredImage.width();
+    qreal transformY = drawingPixmapSize.height() / filteredImage.height();
+    transform.scale(transformX, transformY);
+    drawingPixmap = QPixmap::fromImage(filteredImage)
+                        .transformed(transform, Qt::SmoothTransformation);
+}
+
+QSize QPhotoItem::getSize() const
 {
     return drawingPixmap.size();
 }
 
-QSize QPhotoItem::getCroppedSize()
+QSize QPhotoItem::getCroppedSize() const
 {
     return QSize(croppedSize.width(), croppedSize.height());
 }
 
-QPoint QPhotoItem::getPos()
+QPoint QPhotoItem::getPos() const
 {
     return QPoint(pos().x() + left, pos().y() + top);
 }
 
-QString QPhotoItem::getName()
+QString QPhotoItem::getName() const
 {
     return name;
 }
 
-int QPhotoItem::getId()
+int QPhotoItem::getId() const
 {
     return id;
 }
 
-int QPhotoItem::getAlpha()
+int QPhotoItem::getAlpha() const
 {
     return this->alpha;
+}
+
+int QPhotoItem::getBrightness() const
+{
+    return brightness;
+}
+
+void QPhotoItem::setBrightness(int newBrightness)
+{
+    brightness = newBrightness;
+
+    //    qreal brightMax = -1000, brightMin = 1000;
+
+    //    for (int y = 0; y < filteredImage.height(); ++y) {
+    //        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+    //        for (int x = 0; x < filteredImage.width(); ++x) {
+    //            QRgb &rgb = line[x];
+    //            qreal brightCurr = 0.299 * qRed(rgb) + 0.587 * qGreen(rgb) + 0.114 * qBlue(rgb);
+    //            brightMin = std::min(brightMin, brightCurr);
+    //            brightMax = std::max(brightMax, brightCurr);
+    //        }
+    //    }
+
+    //    qreal newBrightMin = brightMin * (1 + newBrightness / 50.0);
+    //    qreal newBrightMax = brightMax * (1 + newBrightness / 50.0);
+
+    //    for (int y = 0; y < filteredImage.height(); ++y) {
+    //        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+    //        for (int x = 0; x < filteredImage.width(); ++x) {
+    //            QRgb &rgb = line[x];
+    //            qreal brightCurr = 0.299 * qRed(rgb) + 0.587 * qGreen(rgb) + 0.114 * qBlue(rgb);
+    //            qreal newBright = (brightCurr - brightMin) / (brightMax - brightMin)
+    //                                  * (newBrightMax - newBrightMin)
+    //                              + newBrightMin;
+    //            rgb = qRgba(qRed(rgb) * newBright / brightCurr,
+    //                        qGreen(rgb) * newBright / brightCurr,
+    //                        qBlue(rgb) * newBright / brightCurr,
+    //                        qAlpha(rgb));
+    //        }
+    //    }
+
+    qreal averageBright = 0;
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            averageBright += 0.299 * qRed(rgb) + 0.587 * qGreen(rgb) + 0.114 * qBlue(rgb);
+        }
+    }
+    averageBright /= filteredImage.height() * filteredImage.width();
+
+    unsigned char b[256];
+
+    qreal k = 1.0 + newBrightness / 50.0;
+
+    for (int i = 0; i < 256; i++) {
+        qreal delta = i - averageBright;
+        qreal temp = averageBright + k * delta;
+
+        if (temp < 0)
+            temp = 0;
+
+        if (temp >= 255)
+            temp = 255;
+        b[i] = temp;
+    }
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            rgb = qRgba(b[qRed(rgb)], b[qGreen(rgb)], b[qBlue(rgb)], qAlpha(rgb));
+        }
+    }
+
+    QPointF oldPos = pos();
+    applyChanges();
+    setPos(oldPos);
+    scene()->update();
 }
 
 void QPhotoItem::rotateClockwise()
@@ -238,12 +329,7 @@ void QPhotoItem::resize(int width, int height)
 
     moveBy(newPos.x(), newPos.y());
 
-    QTransform transform;
-    qreal transformX = drawingPixmapSize.width() / filteredImage.width();
-    qreal transformY = drawingPixmapSize.height() / filteredImage.height();
-    transform.scale(transformX, transformY);
-    drawingPixmap = QPixmap::fromImage(filteredImage)
-                        .transformed(transform, Qt::SmoothTransformation);
+    applyChanges();
 
     left = newLeft;
     top = newTop;
@@ -276,15 +362,33 @@ void QPhotoItem::flipV()
 void QPhotoItem::setAlpha(int alpha)
 {
     this->alpha = alpha;
-    //    for (int y = 0; y < filteredImage.height(); ++y) {
-    //        QRgb *line = reinterpret_cast<QRgb*>(filteredImage.scanLine(y));
-    //        for (int x = 0; x < filteredImage.width(); ++x) {
-    //            QRgb &rgb = line[x];
-    //            rgb = qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), alpha);
-    //        }
-    //    }
-    //    drawingPixmap = QPixmap::fromImage(filteredImage);
-    //    update();
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            rgb = qRgba(qRed(rgb), qGreen(rgb), qBlue(rgb), alpha);
+        }
+    }
+    QPointF oldPos = pos();
+    applyChanges();
+    setPos(oldPos);
+    scene()->update();
+}
+
+void QPhotoItem::monochromeize()
+{
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            int average = (qRed(rgb) + qGreen(rgb) + qBlue(rgb)) / 3;
+            rgb = qRgba(average, average, average, qAlpha(rgb));
+        }
+    }
+    QPointF oldPos = pos();
+    applyChanges();
+    setPos(oldPos);
+    scene()->update();
 }
 
 void QPhotoItem::resizeOnDrag(QPointF cursorPos)
@@ -317,12 +421,7 @@ void QPhotoItem::resizeOnDrag(QPointF cursorPos)
 
     moveBy(newPos.x(), newPos.y());
 
-    QTransform transform;
-    qreal transformX = drawingPixmapSize.width() / filteredImage.width();
-    qreal transformY = drawingPixmapSize.height() / filteredImage.height();
-    transform.scale(transformX, transformY);
-    drawingPixmap = QPixmap::fromImage(filteredImage)
-                        .transformed(transform, Qt::SmoothTransformation);
+    applyChanges();
 
     left = newLeft;
     top = newTop;

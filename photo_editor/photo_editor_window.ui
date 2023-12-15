@@ -216,6 +216,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </property>
                  <item>
                   <widget class="QLabel" name="lblX">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>X:</string>
                    </property>
@@ -223,6 +228,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </item>
                  <item>
                   <widget class="QLineEdit" name="edtX">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="maxLength">
                     <number>5</number>
                    </property>
@@ -237,6 +247,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </property>
                  <item>
                   <widget class="QLabel" name="lblY">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>Y:</string>
                    </property>
@@ -244,6 +259,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </item>
                  <item>
                   <widget class="QLineEdit" name="edtY">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="maxLength">
                     <number>5</number>
                    </property>
@@ -289,6 +309,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </property>
                  <item>
                   <widget class="QLabel" name="lblWidth">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>Width:</string>
                    </property>
@@ -296,6 +321,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </item>
                  <item>
                   <widget class="QLineEdit" name="edtWidth">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="maxLength">
                     <number>5</number>
                    </property>
@@ -310,6 +340,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </property>
                  <item>
                   <widget class="QLabel" name="lblHeight">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="text">
                     <string>Height</string>
                    </property>
@@ -317,6 +352,11 @@ QPushButton:pressed, QToolButton:pressed {
                  </item>
                  <item>
                   <widget class="QLineEdit" name="edtHeight">
+                   <property name="font">
+                    <font>
+                     <pointsize>10</pointsize>
+                    </font>
+                   </property>
                    <property name="maxLength">
                     <number>5</number>
                    </property>
@@ -447,7 +487,7 @@ QPushButton:pressed, QToolButton:pressed {
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>100</height>
+              <height>200</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -456,45 +496,135 @@ QPushButton:pressed, QToolButton:pressed {
             <property name="title">
              <string/>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout_10">
-               <item>
-                <widget class="QLabel" name="lblAlpha">
-                 <property name="text">
-                  <string>Alpha:</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QSlider" name="sliderAlpha">
-                 <property name="maximum">
-                  <number>255</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLineEdit" name="edtAlpha">
-                 <property name="maximumSize">
-                  <size>
-                   <width>40</width>
-                   <height>16777215</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string>0</string>
-                 </property>
-                 <property name="readOnly">
-                  <bool>true</bool>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
+            <widget class="QPushButton" name="btnMonochrome">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>116</width>
+               <height>29</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string>Monochrome</string>
+             </property>
+            </widget>
+            <widget class="QWidget" name="">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>241</width>
+               <height>27</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QLabel" name="lblAlpha">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Alpha:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="sliderAlpha">
+                <property name="maximum">
+                 <number>255</number>
+                </property>
+                <property name="value">
+                 <number>255</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edtAlpha">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>255</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>100</y>
+               <width>251</width>
+               <height>27</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QLabel" name="lblBright">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Brightness:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="sliderBright">
+                <property name="minimum">
+                 <number>-50</number>
+                </property>
+                <property name="maximum">
+                 <number>50</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="edtBright">
+                <property name="maximumSize">
+                 <size>
+                  <width>30</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>0</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
           <item>

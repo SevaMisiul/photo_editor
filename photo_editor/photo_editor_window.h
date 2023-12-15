@@ -41,6 +41,10 @@ private slots:
 
     void on_sliderAlpha_valueChanged(int value);
 
+    void on_btnMonochrome_clicked();
+
+    void on_sliderBright_valueChanged(int value);
+
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;

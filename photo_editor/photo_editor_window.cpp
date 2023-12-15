@@ -111,6 +111,8 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
             ui->edtY->setText(QString::number(item.getPos().y()));
 
             ui->sliderAlpha->setValue(item.getAlpha());
+
+            ui->sliderBright->setValue(item.getBrightness());
         }
         break;
     case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
@@ -248,4 +250,16 @@ void PhotoEditorWindow::on_sliderAlpha_valueChanged(int value)
 {
     ui->edtAlpha->setText(QString::number(value));
     items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setAlpha(value);
+}
+
+void PhotoEditorWindow::on_btnMonochrome_clicked()
+{
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->monochromeize();
+}
+
+
+void PhotoEditorWindow::on_sliderBright_valueChanged(int value)
+{
+    ui->edtBright->setText(QString::number(value));
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setBrightness(value);
 }
