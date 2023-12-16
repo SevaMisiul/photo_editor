@@ -27,8 +27,6 @@ private slots:
 
     void on_btnSave_clicked();
 
-    void on_pushButton_2_clicked();
-
     void on_listItems_itemClicked(QListWidgetItem *item);
 
     void on_btnRotate_clicked();
@@ -41,9 +39,7 @@ private slots:
 
     void on_sliderAlpha_valueChanged(int value);
 
-    void on_btnMonochrome_clicked();
-
-    void on_sliderBright_valueChanged(int value);
+    void on_cbFilters_currentIndexChanged(int index);
 
 private:
     int itemsCount;

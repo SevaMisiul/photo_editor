@@ -64,6 +64,35 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     ui->gbTranspose->setVisible(false);
     ui->btnUp->setVisible(false);
     ui->gbFilters->setVisible(false);
+
+    ui->cbFilters->addItem("------",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Null})));
+    ui->cbFilters->addItem("Monochrome",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Monochrome})));
+    ui->cbFilters->addItem("Sepia",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Sepia})));
+    ui->cbFilters->addItem("Negative",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Negative})));
+    ui->cbFilters->addItem("Retro",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Retro})));
+    ui->cbFilters->addItem("Noise",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Noise})));
+    ui->cbFilters->addItem("Contrast",
+                           QVariant(QMetaType(QMetaType::Void),
+                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
+                                        QPhotoItem::PhotoFilter::Contrast})));
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -111,8 +140,6 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
             ui->edtY->setText(QString::number(item.getPos().y()));
 
             ui->sliderAlpha->setValue(item.getAlpha());
-
-            ui->sliderBright->setValue(item.getBrightness());
         }
         break;
     case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
@@ -189,11 +216,6 @@ void PhotoEditorWindow::on_btnSave_clicked()
     }
 }
 
-void PhotoEditorWindow::on_pushButton_2_clicked()
-{
-    layer->scale(300, 300);
-}
-
 void PhotoEditorWindow::on_listItems_itemClicked(QListWidgetItem *item)
 {
     for (auto photoItem : mainScene->selectedItems()) {
@@ -252,14 +274,33 @@ void PhotoEditorWindow::on_sliderAlpha_valueChanged(int value)
     items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setAlpha(value);
 }
 
-void PhotoEditorWindow::on_btnMonochrome_clicked()
+void PhotoEditorWindow::on_cbFilters_currentIndexChanged(int index)
 {
-    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->monochromeize();
-}
-
-
-void PhotoEditorWindow::on_sliderBright_valueChanged(int value)
-{
-    ui->edtBright->setText(QString::number(value));
-    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->setBrightness(value);
+    if (ui->listItems->selectedItems().size() > 0) {
+        switch (*reinterpret_cast<QPhotoItem::PhotoFilter *>(ui->cbFilters->itemData(index).data())) {
+        case QPhotoItem::PhotoFilter::Null:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->resetFilters();
+            break;
+        case QPhotoItem::PhotoFilter::Contrast:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
+                ->applyContrast(25);
+            break;
+        case QPhotoItem::PhotoFilter::Monochrome:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
+                ->applyMonochrome();
+            break;
+        case QPhotoItem::PhotoFilter::Negative:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applyNegativ();
+            break;
+        case QPhotoItem::PhotoFilter::Noise:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applyNoise();
+            break;
+        case QPhotoItem::PhotoFilter::Retro:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applyRetro();
+            break;
+        case QPhotoItem::PhotoFilter::Sepia:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applySepia();
+            break;
+        }
+    }
 }

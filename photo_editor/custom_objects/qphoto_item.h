@@ -15,9 +15,11 @@ public:
 
     enum class PhotoItemChanged { ItemPositionChanged, ItemSizeChanged, ItemSelectionChanged };
 
+    enum class PhotoFilter { Null = 0, Monochrome, Sepia, Negative, Retro, Noise, Contrast };
+
 private:
     QString name;
-    QImage filteredImage;
+    QImage filteredImage, originalImage;
     QPixmap drawingPixmap;
     QSizeF croppedSize, sizeBefore, drawingPixmapSize;
     QPointF cursorPosBefore, itemPosBefore;
@@ -27,10 +29,13 @@ private:
     int alpha{255};
     int brightness{0};
     std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;
+    PhotoFilter currFilter{0};
 
     void paintSelected(QPainter *painter);
     void paintCropping(QPainter *painter);
     void applyChanges();
+    void setContrast(int newVal);
+    void setNoise();
 
     enum class State { Disabled = 0, Resizing, Cropping, Moving, Selected };
     State state;
@@ -43,7 +48,8 @@ public:
     [[nodiscard]] int getId() const;
     [[nodiscard]] int getAlpha() const;
     [[nodiscard]] int getBrightness() const;
-    void setBrightness(int newBrightness);
+    [[nodiscard]] PhotoFilter getCurrFilter() const;
+
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
     void setCroppedPos(int x, int y);
     void up();
@@ -52,7 +58,13 @@ public:
     void flipH();
     void flipV();
     void setAlpha(int alpha);
-    void monochromeize();
+    void applyMonochrome();
+    void applySepia();
+    void applyNegativ();
+    void applyRetro();
+    void applyNoise();
+    void applyContrast(int newVal);
+    void resetFilters();
 
 protected:
     void resizeOnDrag(QPointF delta);
