@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>782</width>
-    <height>522</height>
+    <width>758</width>
+    <height>456</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,7 +62,7 @@ QPushButton:pressed {
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="gbPresets">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -78,6 +78,503 @@ QPushButton:pressed {
        <property name="title">
         <string>BLANK DOCUMENT PRESETS</string>
        </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="spacing">
+           <number>30</number>
+          </property>
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="gb1920_1080">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1920 x 1080</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_15">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1920_1080">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gb1080_1080">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1080 x 1080</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_17">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1080_1080">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <property name="spacing">
+           <number>30</number>
+          </property>
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="gb1080_720">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1080 x 720</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_20">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1080_720">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gb1080_1920">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1080 x 1920</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_19">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1080_1920">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <property name="spacing">
+           <number>30</number>
+          </property>
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <widget class="QGroupBox" name="gb1280_720">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1280 x 720</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_18">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1280_720">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="gb1280_1280">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {
+	border: 0px;
+};</string>
+            </property>
+            <property name="title">
+             <string>1280 x 1280</string>
+            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QPushButton" name="btn1280_1280">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>90</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>133</width>
+                 <height>82</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QPushButton {
+  background-color: #FAFBFC;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  color: #24292E;
+  font-family:  -apple-system, system-ui, &quot;Segoe UI&quot;, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;;
+  font-size: 16px;
+  line-height: 18px;
+  padding: 3px 16px;
+}</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset resource="resource.qrc">
+                 <normaloff>:/res/resources/template.png</normaloff>:/res/resources/template.png</iconset>
+               </property>
+               <property name="iconSize">
+                <size>
+                 <width>150</width>
+                 <height>88</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>
@@ -530,6 +1027,8 @@ QPushButton:pressed {
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

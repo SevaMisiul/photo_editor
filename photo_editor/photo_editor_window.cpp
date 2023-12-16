@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QString>
+#include <qdebug.h>
 
 PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name, QWidget *parent)
     : QMainWindow(parent)
@@ -66,33 +67,17 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
     ui->gbFilters->setVisible(false);
 
     ui->cbFilters->addItem("------",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Null})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Null));
     ui->cbFilters->addItem("Monochrome",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Monochrome})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Monochrome));
     ui->cbFilters->addItem("Sepia",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Sepia})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Sepia));
     ui->cbFilters->addItem("Negative",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Negative})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Negative));
     ui->cbFilters->addItem("Retro",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Retro})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Retro));
     ui->cbFilters->addItem("Noise",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Noise})));
-    ui->cbFilters->addItem("Contrast",
-                           QVariant(QMetaType(QMetaType::Void),
-                                    reinterpret_cast<void *>(new QPhotoItem::PhotoFilter{
-                                        QPhotoItem::PhotoFilter::Contrast})));
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Noise));
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -140,6 +125,10 @@ void PhotoEditorWindow::updatePhotoView(QPhotoItem &item, QPhotoItem::PhotoItemC
             ui->edtY->setText(QString::number(item.getPos().y()));
 
             ui->sliderAlpha->setValue(item.getAlpha());
+
+            ui->cbFilters->setCurrentIndex(static_cast<int>(item.getCurrFilter()));
+
+            ui->sliderContrast->setValue(item.getContrastVal());
         }
         break;
     case QPhotoItem::PhotoItemChanged::ItemSizeChanged:
@@ -173,6 +162,11 @@ void PhotoEditorWindow::keyPressEvent(QKeyEvent *event)
             items.erase(id);
             listWidgetItems.erase(id);
         }
+    }
+    if (event->key() == Qt::Key_Plus) {
+        ui->mainGraphView->scale(1.05, 1.05);
+    } else if (event->key() == Qt::Key_Minus) {
+        ui->mainGraphView->scale(1 / 1.05, 1 / 1.05);
     }
     QMainWindow::keyPressEvent(event);
 }
@@ -277,13 +271,9 @@ void PhotoEditorWindow::on_sliderAlpha_valueChanged(int value)
 void PhotoEditorWindow::on_cbFilters_currentIndexChanged(int index)
 {
     if (ui->listItems->selectedItems().size() > 0) {
-        switch (*reinterpret_cast<QPhotoItem::PhotoFilter *>(ui->cbFilters->itemData(index).data())) {
+        switch (ui->cbFilters->currentData().value<QPhotoItem::PhotoFilter>()) {
         case QPhotoItem::PhotoFilter::Null:
             items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->resetFilters();
-            break;
-        case QPhotoItem::PhotoFilter::Contrast:
-            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
-                ->applyContrast(25);
             break;
         case QPhotoItem::PhotoFilter::Monochrome:
             items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())
@@ -304,3 +294,32 @@ void PhotoEditorWindow::on_cbFilters_currentIndexChanged(int index)
         }
     }
 }
+
+void PhotoEditorWindow::on_btnImgToBack_clicked()
+{
+    auto& item = items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt());
+    item->resize(layer->getSize().width(), layer->getSize().height());
+    item->setCroppedPos(0, 0);
+    updatePhotoView(*item, QPhotoItem::PhotoItemChanged::ItemSizeChanged);
+}
+
+void PhotoEditorWindow::on_btnBackToImg_clicked()
+{
+    auto& item = items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt());
+    layer->scale(item->getCroppedSize().width(), item->getCroppedSize().height());
+    item->setCroppedPos(0, 0);
+    updatePhotoView(*item, QPhotoItem::PhotoItemChanged::ItemPositionChanged);
+}
+
+void PhotoEditorWindow::on_sliderContrast_valueChanged(int value)
+{
+    ui->edtContrast->setText(QString::number(value));
+    items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applyContrast(value);
+}
+
+
+void PhotoEditorWindow::on_actionCreateFile_triggered()
+{
+    on_btnSave_clicked();
+}
+

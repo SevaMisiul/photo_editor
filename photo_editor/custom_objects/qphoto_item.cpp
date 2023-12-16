@@ -23,7 +23,7 @@ QPhotoItem::QPhotoItem(QString filePath, int id)
     setZValue(nexZValue++);
 
     name = filePath.left(filePath.lastIndexOf('.'));
-    name = name.last(name.length() - (name.lastIndexOf('/') + 1));
+    name = name.right(name.length() - (name.lastIndexOf('/') + 1));
 }
 
 void QPhotoItem::paintSelected(QPainter *painter)
@@ -161,6 +161,86 @@ void QPhotoItem::applyChanges()
                         .transformed(transform, Qt::SmoothTransformation);
 }
 
+void QPhotoItem::setMonochrome()
+{
+    unsigned char redPallet[256], greenPallet[256], bluePallet[256];
+
+    for (int i = 0; i < 256; ++i) {
+        redPallet[i] = i * 0.299;
+        greenPallet[i] = i * 0.587;
+        bluePallet[i] = i * 0.114;
+    }
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            int gray = redPallet[qRed(rgb)] + greenPallet[qGreen(rgb)] + bluePallet[qBlue(rgb)];
+            rgb = qRgba(gray, gray, gray, qAlpha(rgb));
+        }
+    }
+}
+
+void QPhotoItem::setSepia()
+{
+    qreal pallet[9][256];
+
+    for (int i = 0; i < 256; ++i) {
+        pallet[0][i] = i * 0.393;
+        pallet[1][i] = i * 0.769;
+        pallet[2][i] = i * 0.189;
+        pallet[3][i] = i * 0.349;
+        pallet[4][i] = i * 0.686;
+        pallet[5][i] = i * 0.168;
+        pallet[6][i] = i * 0.272;
+        pallet[7][i] = i * 0.534;
+        pallet[8][i] = i * 0.131;
+    }
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            int r = qRed(rgb);
+            int g = qGreen(rgb);
+            int b = qBlue(rgb);
+            int nr = pallet[0][r] + pallet[1][g] + pallet[2][b];
+            int ng = pallet[3][r] + pallet[4][g] + pallet[5][b];
+            int nb = pallet[6][r] + pallet[7][g] + pallet[8][b];
+            rgb = qRgba(std::min(nr, 255), std::min(ng, 255), std::min(nb, 255), qAlpha(rgb));
+        }
+    }
+}
+
+void QPhotoItem::setRetro()
+{
+    setNoise();
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            rgb = qRgba(std::min(qRed(rgb) + 10, 255),
+                        std::min(qGreen(rgb) + 10, 255),
+                        std::min(qBlue(rgb), 255),
+                        qAlpha(rgb));
+        }
+    }
+
+    setContrast(20);
+}
+
+void QPhotoItem::setNegative()
+{
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb = line[x];
+            rgb = qRgba(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb), qAlpha(rgb));
+        }
+    }
+}
+
 void QPhotoItem::setContrast(int newVal)
 {
     qreal averageBright = 0;
@@ -212,9 +292,9 @@ void QPhotoItem::setNoise()
         QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
         for (int x = 0; x < filteredImage.width(); ++x) {
             QRgb &rgb = line[x];
-            rgb = qRgba(std::clamp(qRed(rgb) + (rand() % 25) - 12, 0, 255),
-                        std::clamp(qGreen(rgb) + (rand() % 25) - 12, 0, 255),
-                        std::clamp(qBlue(rgb) + (rand() % 25) - 12, 0, 255),
+            rgb = qRgba(std::clamp(qRed(rgb) + (rand() % 40) - 20, 0, 255),
+                        std::clamp(qGreen(rgb) + (rand() % 40) - 20, 0, 255),
+                        std::clamp(qBlue(rgb) + (rand() % 40) - 20, 0, 255),
                         qAlpha(rgb));
         }
     }
@@ -258,6 +338,11 @@ int QPhotoItem::getBrightness() const
 QPhotoItem::PhotoFilter QPhotoItem::getCurrFilter() const
 {
     return currFilter;
+}
+
+int QPhotoItem::getContrastVal() const
+{
+    return contrastVal;
 }
 
 void QPhotoItem::rotateClockwise()
@@ -338,6 +423,10 @@ void QPhotoItem::flipH()
     filteredImage = filteredImage.transformed(transform);
     drawingPixmap = drawingPixmap.transformed(transform);
 
+    qreal right = drawingPixmapSize.width() - croppedSize.width() - left;
+    moveBy(left - right, 0);
+    left = right;
+
     scene()->update();
 }
 
@@ -349,6 +438,10 @@ void QPhotoItem::flipV()
     originalImage = originalImage.transformed(transform);
     filteredImage = filteredImage.transformed(transform);
     drawingPixmap = drawingPixmap.transformed(transform);
+
+    qreal bottom = drawingPixmapSize.height() - croppedSize.height() - top;
+    moveBy(0, top - bottom);
+    top = bottom;
 
     scene()->update();
 }
@@ -379,24 +472,13 @@ void QPhotoItem::setAlpha(int alpha)
 
 void QPhotoItem::applyMonochrome()
 {
+    currFilter = PhotoFilter::Monochrome;
     filteredImage = originalImage;
 
-    unsigned char redPallet[256], greenPallet[256], bluePallet[256];
+    setContrast(contrastVal);
 
-    for (int i = 0; i < 256; ++i) {
-        redPallet[i] = i * 0.299;
-        greenPallet[i] = i * 0.587;
-        bluePallet[i] = i * 0.114;
-    }
+    setMonochrome();
 
-    for (int y = 0; y < filteredImage.height(); ++y) {
-        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
-        for (int x = 0; x < filteredImage.width(); ++x) {
-            QRgb &rgb = line[x];
-            int gray = redPallet[qRed(rgb)] + greenPallet[qGreen(rgb)] + bluePallet[qBlue(rgb)];
-            rgb = qRgba(gray, gray, gray, qAlpha(rgb));
-        }
-    }
     QPointF oldPos = pos();
     applyChanges();
     setPos(oldPos);
@@ -405,35 +487,12 @@ void QPhotoItem::applyMonochrome()
 
 void QPhotoItem::applySepia()
 {
+    currFilter = PhotoFilter::Sepia;
     filteredImage = originalImage;
 
-    qreal pallet[9][256];
+    setContrast(contrastVal);
 
-    for (int i = 0; i < 256; ++i) {
-        pallet[0][i] = i * 0.393;
-        pallet[1][i] = i * 0.769;
-        pallet[2][i] = i * 0.189;
-        pallet[3][i] = i * 0.349;
-        pallet[4][i] = i * 0.686;
-        pallet[5][i] = i * 0.168;
-        pallet[6][i] = i * 0.272;
-        pallet[7][i] = i * 0.534;
-        pallet[8][i] = i * 0.131;
-    }
-
-    for (int y = 0; y < filteredImage.height(); ++y) {
-        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
-        for (int x = 0; x < filteredImage.width(); ++x) {
-            QRgb &rgb = line[x];
-            int r = qRed(rgb);
-            int g = qGreen(rgb);
-            int b = qBlue(rgb);
-            int nr = pallet[0][r] + pallet[1][g] + pallet[2][b];
-            int ng = pallet[3][r] + pallet[4][g] + pallet[5][b];
-            int nb = pallet[6][r] + pallet[7][g] + pallet[8][b];
-            rgb = qRgba(std::min(nr, 255), std::min(ng, 255), std::min(nb, 255), qAlpha(rgb));
-        }
-    }
+    setSepia();
 
     QPointF oldPos = pos();
     applyChanges();
@@ -443,15 +502,13 @@ void QPhotoItem::applySepia()
 
 void QPhotoItem::applyNegativ()
 {
+    currFilter = PhotoFilter::Negative;
     filteredImage = originalImage;
 
-    for (int y = 0; y < filteredImage.height(); ++y) {
-        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
-        for (int x = 0; x < filteredImage.width(); ++x) {
-            QRgb &rgb = line[x];
-            rgb = qRgba(255 - qRed(rgb), 255 - qGreen(rgb), 255 - qBlue(rgb), qAlpha(rgb));
-        }
-    }
+    setContrast(contrastVal);
+
+    setNegative();
+
     QPointF oldPos = pos();
     applyChanges();
     setPos(oldPos);
@@ -460,22 +517,12 @@ void QPhotoItem::applyNegativ()
 
 void QPhotoItem::applyRetro()
 {
+    currFilter = PhotoFilter::Retro;
     filteredImage = originalImage;
 
-    setNoise();
+    setContrast(contrastVal);
 
-    for (int y = 0; y < filteredImage.height(); ++y) {
-        QRgb *line = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
-        for (int x = 0; x < filteredImage.width(); ++x) {
-            QRgb &rgb = line[x];
-            rgb = qRgba(std::min(qRed(rgb) + 5, 255),
-                        std::min(qGreen(rgb) + 5, 255),
-                        std::min(qBlue(rgb), 255),
-                        qAlpha(rgb));
-        }
-    }
-
-    setContrast(10);
+    setRetro();
 
     QPointF oldPos = pos();
     applyChanges();
@@ -485,7 +532,10 @@ void QPhotoItem::applyRetro()
 
 void QPhotoItem::applyNoise()
 {
+    currFilter = PhotoFilter::Noise;
     filteredImage = originalImage;
+
+    setContrast(contrastVal);
 
     setNoise();
 
@@ -497,7 +547,28 @@ void QPhotoItem::applyNoise()
 
 void QPhotoItem::applyContrast(int newVal)
 {
+    contrastVal = newVal;
     filteredImage = originalImage;
+
+    switch (currFilter) {
+    case PhotoFilter::Monochrome:
+        setMonochrome();
+        break;
+    case PhotoFilter::Negative:
+        setNegative();
+        break;
+    case PhotoFilter::Noise:
+        setNoise();
+        break;
+    case PhotoFilter::Retro:
+        setRetro();
+        break;
+    case PhotoFilter::Sepia:
+        setSepia();
+        break;
+    case PhotoFilter::Null:
+        break;
+    }
 
     setContrast(newVal);
 
@@ -509,6 +580,7 @@ void QPhotoItem::applyContrast(int newVal)
 
 void QPhotoItem::resetFilters()
 {
+    currFilter = PhotoFilter::Null;
     filteredImage = originalImage;
 
     QPointF oldPos = pos();

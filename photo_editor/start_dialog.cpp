@@ -129,8 +129,45 @@ void StartDialog::on_btnColor_clicked()
     setButtonColor();
 }
 
-void StartDialog::on_btnCreate_clicked()
+void StartDialog::on_btn1920_1080_clicked()
 {
-    createMode = CreateMode::create;
+    acceptTemplate(1920, 1080);
+}
+
+void StartDialog::acceptTemplate(int w, int h)
+{
+    ui->editA->setText("255");
+    ui->editR->setText("255");
+    ui->editG->setText("255");
+    ui->editB->setText("255");
+    ui->editProjectName->setText(QString("Project %1 x %2").arg(w).arg(h));
+    ui->editWidth->setText(QString::number(w));
+    ui->editHeight->setText(QString::number(h));
+    accept();
+}
+
+void StartDialog::on_btn1080_1080_clicked()
+{
+    acceptTemplate(1080, 1080);
+}
+
+void StartDialog::on_btn1080_720_clicked()
+{
+    acceptTemplate(1080, 720);
+}
+
+void StartDialog::on_btn1080_1920_clicked()
+{
+    acceptTemplate(1080, 1920);
+}
+
+void StartDialog::on_btn1280_720_clicked()
+{
+    acceptTemplate(1280, 720);
+}
+
+void StartDialog::on_btn1280_1280_clicked()
+{
+    acceptTemplate(1280, 1280);
 }
 

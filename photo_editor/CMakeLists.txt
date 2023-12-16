@@ -51,6 +51,14 @@ else()
     else()
         add_executable(photo_editor
             ${PROJECT_SOURCES}
+            custom_objects/qphoto_item.h custom_objects/qphoto_item.cpp
+            custom_objects/qphoto_item.h custom_objects/qphoto_item.cpp
+            custom_objects/qbase_layer.h custom_objects/qbase_layer.cpp
+            start_dialog.h start_dialog.cpp start_dialog.ui
+            color_validator/qcolor_validator.h color_validator/qcolor_validator.cpp
+            save_dialog.h save_dialog.cpp save_dialog.ui
+            custom_list_widget/qcustom_list_widget.h
+            resource.qrc
         )
     endif()
 

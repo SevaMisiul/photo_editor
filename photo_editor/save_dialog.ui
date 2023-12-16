@@ -72,7 +72,7 @@ QPushButton:pressed {
     <rect>
      <x>160</x>
      <y>180</y>
-     <width>168</width>
+     <width>171</width>
      <height>31</height>
     </rect>
    </property>
@@ -132,9 +132,9 @@ QPushButton:disabled { background-color: #bdc3c7; color: #7f8c8d; }</string>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>11</y>
-     <width>284</width>
+     <x>40</x>
+     <y>10</y>
+     <width>286</width>
      <height>142</height>
     </rect>
    </property>

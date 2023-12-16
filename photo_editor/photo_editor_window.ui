@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1046</width>
-    <height>1035</height>
+    <width>1040</width>
+    <height>824</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -198,6 +198,9 @@ QPushButton:pressed, QToolButton:pressed {
              <bool>true</bool>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="spacing">
+              <number>6</number>
+             </property>
              <property name="topMargin">
               <number>5</number>
              </property>
@@ -374,7 +377,7 @@ QPushButton:pressed, QToolButton:pressed {
             <property name="maximumSize">
              <size>
               <width>16777215</width>
-              <height>60</height>
+              <height>16777215</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -386,18 +389,9 @@ QPushButton:pressed, QToolButton:pressed {
             <property name="flat">
              <bool>true</bool>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_9">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>6</number>
-             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
              <property name="topMargin">
               <number>5</number>
-             </property>
-             <property name="rightMargin">
-              <number>6</number>
              </property>
              <property name="bottomMargin">
               <number>0</number>
@@ -479,6 +473,27 @@ QPushButton:pressed, QToolButton:pressed {
                </item>
               </layout>
              </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <property name="topMargin">
+                <number>11</number>
+               </property>
+               <item>
+                <widget class="QPushButton" name="btnImgToBack">
+                 <property name="text">
+                  <string>Img to back</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="btnBackToImg">
+                 <property name="text">
+                  <string>Back to img</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
             </layout>
            </widget>
           </item>
@@ -548,7 +563,53 @@ QPushButton:pressed, QToolButton:pressed {
               </layout>
              </item>
              <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <property name="topMargin">
+                <number>11</number>
+               </property>
+               <item>
+                <widget class="QLabel" name="lblContrast">
+                 <property name="text">
+                  <string>Contrast:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSlider" name="sliderContrast">
+                 <property name="minimum">
+                  <number>-100</number>
+                 </property>
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="edtContrast">
+                 <property name="maximumSize">
+                  <size>
+                   <width>30</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                 <property name="text">
+                  <string>0</string>
+                 </property>
+                 <property name="readOnly">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
               <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <property name="topMargin">
+                <number>11</number>
+               </property>
                <item>
                 <widget class="QLabel" name="lbFilters">
                  <property name="maximumSize">
@@ -614,8 +675,8 @@ QPushButton:pressed, QToolButton:pressed {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1046</width>
-     <height>21</height>
+     <width>1040</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -629,17 +690,17 @@ QPushButton:pressed, QToolButton:pressed {
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionCreateFile">
    <property name="icon">
-    <iconset>
-     <normaloff>.</normaloff>.</iconset>
+    <iconset resource="resource.qrc">
+     <normaloff>:/res/resources/save.png</normaloff>:/res/resources/save.png</iconset>
    </property>
    <property name="text">
-    <string>Create</string>
+    <string>Save</string>
    </property>
    <property name="toolTip">
-    <string>Create</string>
+    <string>Save copy</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+N</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
  </widget>

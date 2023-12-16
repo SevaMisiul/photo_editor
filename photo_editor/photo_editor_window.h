@@ -41,6 +41,14 @@ private slots:
 
     void on_cbFilters_currentIndexChanged(int index);
 
+    void on_btnImgToBack_clicked();
+
+    void on_btnBackToImg_clicked();
+
+    void on_sliderContrast_valueChanged(int value);
+
+    void on_actionCreateFile_triggered();
+
 private:
     int itemsCount;
     Ui::PhotoEditorWindow *ui;

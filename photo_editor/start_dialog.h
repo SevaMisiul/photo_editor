@@ -35,13 +35,25 @@ private slots:
     void on_editG_textEdited(const QString &arg1);
     void on_editB_textEdited(const QString &arg1);
     void on_btnColor_clicked();
-    void on_btnCreate_clicked();
+    void on_btn1920_1080_clicked();
+
+    void on_btn1080_1080_clicked();
+
+    void on_btn1080_720_clicked();
+
+    void on_btn1080_1920_clicked();
+
+    void on_btn1280_720_clicked();
+
+    void on_btn1280_1280_clicked();
 
 private:
-    CreateMode createMode;
+    CreateMode createMode{StartDialog::CreateMode::create};
     Ui::StartDialog *ui;
     int r, g, b;
     QString filePath;
+
+    void acceptTemplate(int w, int h);
 };
 
 #endif // START_DIALOG_H

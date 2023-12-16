@@ -15,7 +15,7 @@ public:
 
     enum class PhotoItemChanged { ItemPositionChanged, ItemSizeChanged, ItemSelectionChanged };
 
-    enum class PhotoFilter { Null = 0, Monochrome, Sepia, Negative, Retro, Noise, Contrast };
+    enum class PhotoFilter { Null = 0, Monochrome = 1, Sepia = 2, Negative = 3, Retro = 4, Noise = 5 };
 
 private:
     QString name;
@@ -30,10 +30,15 @@ private:
     int brightness{0};
     std::function<void(QPhotoItem &, PhotoItemChanged)> updateView;
     PhotoFilter currFilter{0};
+    int contrastVal{0};
 
     void paintSelected(QPainter *painter);
     void paintCropping(QPainter *painter);
     void applyChanges();
+    void setMonochrome();
+    void setSepia();
+    void setRetro();
+    void setNegative();
     void setContrast(int newVal);
     void setNoise();
 
@@ -49,6 +54,7 @@ public:
     [[nodiscard]] int getAlpha() const;
     [[nodiscard]] int getBrightness() const;
     [[nodiscard]] PhotoFilter getCurrFilter() const;
+    [[nodiscard]] int getContrastVal() const;
 
     void setViewUpdate(std::function<void(QPhotoItem &, PhotoItemChanged)> updateView);
     void setCroppedPos(int x, int y);
@@ -87,5 +93,7 @@ protected:
     virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event) override;
     virtual QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;
 };
+
+Q_DECLARE_METATYPE(QPhotoItem::PhotoFilter)
 
 #endif // QPHOTOITEM_H

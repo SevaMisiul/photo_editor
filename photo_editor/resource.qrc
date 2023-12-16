@@ -5,5 +5,7 @@
         <file>resources/flipV.png</file>
         <file>resources/logo.png</file>
         <file>resources/rotate.png</file>
+        <file>resources/template.png</file>
+        <file>resources/save.png</file>
     </qresource>
 </RCC>
