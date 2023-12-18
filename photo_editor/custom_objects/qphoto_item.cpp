@@ -300,6 +300,39 @@ void QPhotoItem::setNoise()
     }
 }
 
+void QPhotoItem::setBlur()
+{
+    QImage tmpCopy(filteredImage);
+
+    for (int y = 0; y < filteredImage.height(); ++y) {
+        QRgb *lineUp = reinterpret_cast<QRgb *>(tmpCopy.scanLine(y - 1));
+        QRgb *lineCurr = reinterpret_cast<QRgb *>(tmpCopy.scanLine(y));
+        QRgb *lineDown = reinterpret_cast<QRgb *>(tmpCopy.scanLine(y + 1));
+        QRgb *curr = reinterpret_cast<QRgb *>(filteredImage.scanLine(y));
+        for (int x = 0; x < filteredImage.width(); ++x) {
+            QRgb &rgb11 = lineUp[x - 1];
+            QRgb &rgb12 = lineUp[x];
+            QRgb &rgb13 = lineUp[x + 1];
+            QRgb &rgb21 = lineCurr[x - 1];
+            QRgb &rgb22 = lineCurr[x];
+            QRgb &rgb23 = lineCurr[x + 1];
+            QRgb &rgb31 = lineDown[x - 1];
+            QRgb &rgb32 = lineDown[x];
+            QRgb &rgb33 = lineDown[x + 1];
+
+            curr[x] = qRgba((qRed(rgb11) + qRed(rgb12) + qRed(rgb13)
+                             + qRed(rgb21) + qRed(rgb22) + qRed(rgb23)
+                             + qRed(rgb31) + qRed(rgb32) + qRed(rgb33)) / 9,
+                            (qGreen(rgb11) + qGreen(rgb12) + qGreen(rgb13)
+                             + qGreen(rgb21) + qGreen(rgb22) + qGreen(rgb23)
+                             + qGreen(rgb31) + qGreen(rgb32) + qGreen(rgb33)) / 9,
+                            (qBlue(rgb11) + qBlue(rgb12) + qBlue(rgb13)
+                             + qBlue(rgb21) + qBlue(rgb22) + qBlue(rgb23)
+                             + qBlue(rgb31) + qBlue(rgb32) + qBlue(rgb33)) / 9, alpha);
+        }
+    }
+}
+
 QSize QPhotoItem::getSize() const
 {
     return drawingPixmap.size();
@@ -566,11 +599,29 @@ void QPhotoItem::applyContrast(int newVal)
     case PhotoFilter::Sepia:
         setSepia();
         break;
+    case PhotoFilter::Blur:
+        setBlur();
+        break;
     case PhotoFilter::Null:
         break;
     }
 
     setContrast(newVal);
+
+    QPointF oldPos = pos();
+    applyChanges();
+    setPos(oldPos);
+    scene()->update();
+}
+
+void QPhotoItem::applyBlur()
+{
+    currFilter = PhotoFilter::Blur;
+    filteredImage = originalImage;
+
+    setContrast(contrastVal);
+
+    setBlur();
 
     QPointF oldPos = pos();
     applyChanges();

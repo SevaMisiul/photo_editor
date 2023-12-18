@@ -78,6 +78,8 @@ PhotoEditorWindow::PhotoEditorWindow(QColor bgColor, QSize bgSize, QString name,
                            QVariant::fromValue(QPhotoItem::PhotoFilter::Retro));
     ui->cbFilters->addItem("Noise",
                            QVariant::fromValue(QPhotoItem::PhotoFilter::Noise));
+    ui->cbFilters->addItem("Blur",
+                           QVariant::fromValue(QPhotoItem::PhotoFilter::Blur));
 }
 
 PhotoEditorWindow::~PhotoEditorWindow()
@@ -290,6 +292,9 @@ void PhotoEditorWindow::on_cbFilters_currentIndexChanged(int index)
             break;
         case QPhotoItem::PhotoFilter::Sepia:
             items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applySepia();
+            break;
+        case QPhotoItem::PhotoFilter::Blur:
+            items.at(ui->listItems->selectedItems()[0]->data(Qt::UserRole).toInt())->applyBlur();
             break;
         }
     }

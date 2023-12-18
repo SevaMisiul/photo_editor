@@ -92,10 +92,16 @@ QPushButton:pressed {
           </property>
           <item>
            <widget class="QGroupBox" name="gb1920_1080">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -168,10 +174,16 @@ QPushButton:pressed {
           </item>
           <item>
            <widget class="QGroupBox" name="gb1080_1080">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -257,10 +269,16 @@ QPushButton:pressed {
           </property>
           <item>
            <widget class="QGroupBox" name="gb1080_720">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -333,10 +351,16 @@ QPushButton:pressed {
           </item>
           <item>
            <widget class="QGroupBox" name="gb1080_1920">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -422,10 +446,16 @@ QPushButton:pressed {
           </property>
           <item>
            <widget class="QGroupBox" name="gb1280_720">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">
@@ -498,10 +528,16 @@ QPushButton:pressed {
           </item>
           <item>
            <widget class="QGroupBox" name="gb1280_1280">
+            <property name="minimumSize">
+             <size>
+              <width>169</width>
+              <height>113</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>16777215</width>
-              <height>16777215</height>
+              <width>169</width>
+              <height>113</height>
              </size>
             </property>
             <property name="styleSheet">

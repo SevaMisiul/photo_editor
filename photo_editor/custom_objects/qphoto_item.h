@@ -15,7 +15,7 @@ public:
 
     enum class PhotoItemChanged { ItemPositionChanged, ItemSizeChanged, ItemSelectionChanged };
 
-    enum class PhotoFilter { Null = 0, Monochrome = 1, Sepia = 2, Negative = 3, Retro = 4, Noise = 5 };
+    enum class PhotoFilter { Null = 0, Monochrome = 1, Sepia = 2, Negative = 3, Retro = 4, Noise = 5, Blur = 6};
 
 private:
     QString name;
@@ -41,6 +41,7 @@ private:
     void setNegative();
     void setContrast(int newVal);
     void setNoise();
+    void setBlur();
 
     enum class State { Disabled = 0, Resizing, Cropping, Moving, Selected };
     State state;
@@ -70,6 +71,7 @@ public:
     void applyRetro();
     void applyNoise();
     void applyContrast(int newVal);
+    void applyBlur();
     void resetFilters();
 
 protected:
