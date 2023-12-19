@@ -182,95 +182,95 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="107"/>
+        <location filename="start_dialog.ui" line="113"/>
         <source>1920 x 1080</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="183"/>
+        <location filename="start_dialog.ui" line="195"/>
         <source>1080 x 1080</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="272"/>
+        <location filename="start_dialog.ui" line="290"/>
         <source>1080 x 720</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="348"/>
+        <location filename="start_dialog.ui" line="372"/>
         <source>1080 x 1920</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="437"/>
+        <location filename="start_dialog.ui" line="467"/>
         <source>1280 x 720</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="513"/>
+        <location filename="start_dialog.ui" line="549"/>
         <source>1280 x 1280</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="603"/>
+        <location filename="start_dialog.ui" line="639"/>
         <source>PROJECT DETAILS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="635"/>
+        <location filename="start_dialog.ui" line="671"/>
         <source>Project name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="671"/>
+        <location filename="start_dialog.ui" line="707"/>
         <source>Width:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="707"/>
+        <location filename="start_dialog.ui" line="743"/>
         <source>Height:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="748"/>
+        <location filename="start_dialog.ui" line="784"/>
         <source>Background color:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="777"/>
+        <location filename="start_dialog.ui" line="813"/>
         <source>R:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="796"/>
-        <location filename="start_dialog.ui" line="841"/>
-        <location filename="start_dialog.ui" line="886"/>
-        <location filename="start_dialog.ui" line="929"/>
+        <location filename="start_dialog.ui" line="832"/>
+        <location filename="start_dialog.ui" line="877"/>
+        <location filename="start_dialog.ui" line="922"/>
+        <location filename="start_dialog.ui" line="965"/>
         <source>255</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="822"/>
+        <location filename="start_dialog.ui" line="858"/>
         <source>G:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="867"/>
+        <location filename="start_dialog.ui" line="903"/>
         <source>B:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="911"/>
+        <location filename="start_dialog.ui" line="947"/>
         <source>A:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="990"/>
+        <location filename="start_dialog.ui" line="1026"/>
         <source>Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="start_dialog.ui" line="1019"/>
+        <location filename="start_dialog.ui" line="1055"/>
         <source>Create</source>
         <translation type="unfinished"></translation>
     </message>

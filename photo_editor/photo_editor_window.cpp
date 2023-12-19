@@ -178,7 +178,7 @@ void PhotoEditorWindow::on_btnAddItem_clicked()
     QString filePath = QFileDialog::getOpenFileName(this,
                                                     "Image",
                                                     QDir::homePath() + "/Pictures/",
-                                                    "Images (*.png *.jpg *.bmp)");
+                                                    "Images (*.png *.jpg *.jpeg *.bmp)");
     if (!filePath.isEmpty()) {
         auto item = std::make_unique<QPhotoItem>(filePath, itemsCount);
         addPhotoItem(item, filePath);

@@ -91,7 +91,7 @@ void StartDialog::on_editHeight_textChanged(const QString &arg1)
 
 void StartDialog::on_btnOpen_clicked()
 {
-    filePath = QFileDialog::getOpenFileName(this, "Image", QDir::homePath() + "/Pictures/", "Images (*.png *.jpg *.bmp)");
+    filePath = QFileDialog::getOpenFileName(this, "Image", QDir::homePath() + "/Pictures/", "Images (*.png *.jpg *.jpeg *.bmp)");
     if (!filePath.isEmpty()) {
         createMode = CreateMode::open;
         accept();
